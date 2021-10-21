@@ -1,0 +1,152 @@
+/* #region Colors */
+.black {
+  background-color: black;
+}
+.white {
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.red {
+  background-color: #c70639;
+}
+.orange {
+  background-color: #ff8d1a;
+}
+.yellow {
+  background-color: #ffc301;
+}
+.lime {
+  background-color: #eedd53;
+}
+.green {
+  background-color: #add45c;
+}
+.green-tur {
+  background-color: #57c785;
+}
+.turquoise {
+  background-color: #01baad;
+}
+.blue {
+  background-color: #2a7b9b;
+}
+.marine-blue {
+  background-color: #3d3d6b;
+}
+.brown {
+  background-color: #511849;
+}
+.cherry {
+  background-color: #900c3f;
+}
+/* #endregion Colors */
+
+.container {
+  text-align: center;
+  color: #444;
+  font-family: "Fredoka One", "Segoe UI", sans-serif;
+}
+h1 {
+  font-size: 3rem;
+  letter-spacing: 1px;
+}
+
+/* #region Color Palette */
+
+.colors-container {
+  display: flex;
+  justify-content: center;
+}
+.color:first-child {
+  border-radius: 5px 0 0 5px;
+}
+.color:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.color {
+  width: 3.5rem;
+  height: 3.5rem;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color:hover {
+  position: relative;
+  transform: scale(1.2);
+  border-radius: 5px;
+}
+.color i {
+  font-size: 2rem;
+  color: #888;
+  mix-blend-mode: color-dodge;
+}
+.color.active.black i {
+  color: white;
+  mix-blend-mode: normal;
+}
+.color.active.white i {
+  color: black;
+  mix-blend-mode: normal;
+}
+/* #endregion */
+
+/* #region Painter Grid */
+.painterGrid {
+  display: grid;
+  grid-template-rows: repeat(14, 2.5em);
+  grid-template-columns: repeat(14, 2.5em);
+  grid-gap: 0;
+
+  width: fit-content;
+  margin: 2rem auto;
+}
+.painterBlock {
+  width: 2.5rem;
+  height: 2.5rem;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  border-top: 1px solid #99999999;
+  border-left: 1px solid #99999999;
+}
+.painterBlock:nth-child(14n) {
+  border-right: 1px solid #99999999;
+}
+.painterBlock:nth-last-child(-n + 14) {
+  border-bottom: 1px solid #99999999;
+}
+/* #endregion */
+
+.button {
+  padding: 0.8em 2.5em;
+  border: 6px none #222;
+  border-bottom-style: solid;
+  border-radius: 5px;
+
+  background-color: #666;
+  color: white;
+  font: 1.3rem "Fredoka One";
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.button:active {
+  border-bottom: none;
+  border-top-style: solid;
+}
+
+/* table {
+  margin: 2rem auto;
+  border-spacing: 0;
+  border-color: #aaa;
+}
+table td {
+  width: 30px;
+  height: 30px;
+} */
