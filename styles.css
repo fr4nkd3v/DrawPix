@@ -121,6 +121,18 @@ h1 {
 .painterBlock:nth-last-child(-n + 14) {
   border-bottom: 1px solid #99999999;
 }
+
+.painted {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.painted:nth-child(14n) {
+  border-right-color: transparent;
+}
+.painted:nth-last-child(-n + 14) {
+  border-bottom-color: transparent;
+}
+
 /* #endregion */
 
 .button {
@@ -140,13 +152,3 @@ h1 {
   border-bottom: none;
   border-top-style: solid;
 }
-
-/* table {
-  margin: 2rem auto;
-  border-spacing: 0;
-  border-color: #aaa;
-}
-table td {
-  width: 30px;
-  height: 30px;
-} */
