@@ -6,7 +6,21 @@ let currentColor; //Color seleccionado de la aplicacion
 const colorBlocks = document.querySelectorAll(".color"); // Bloques de color
 const colorBlockActive = document.querySelector(".color.active"); // Bloque de Color activo
 const gridSection = document.querySelector(".painterGrid"); // Grila pintable
-const resetButton = document.getElementById("reset"); // Boton para resetear la Grilla
+const capture = document.querySelector(".capture"); // Bloque que contiene la captura de la Grilla
+
+// Grid Buttons
+const restartBtn = document.getElementById("restart"); // Boton para resetear la Grilla
+const gridSaveBtn = document.getElementById("grid-save"); // Boton para guardar una imagen de la Grilla
+const captureBtn = document.getElementById("capture"); // Boton para tomar una captura de la Grilla
+
+// Capture Buttons
+const zoomBtn = document.querySelector("#zoom"); // Boton para hacer zoom a la captura
+const captureSaveBtn = document.querySelector("#capture-save"); // Boton para guardar la captura
+const shareBtn = document.querySelector("#share"); // Boton para compartir la captura
+const copyBtn = document.querySelector("#copy"); // Boton para copiar la captura al portapapeles
+
+const closeBtn = document.querySelector("#close"); // Boton para cerrar el panel de la captura
+
 // #endregion
 
 // #region 2. MAIN FUNCTIONS
@@ -76,6 +90,23 @@ function getColor(element) {
     .getPropertyValue("background-color");
 }
 
+// 2.7 Genera una captura de la Grilla
+function getGridCapture() {
+  if (capture.firstChild) {
+    capture.firstElementChild.remove();
+  }
+
+  html2canvas(gridSection).then((canvas) => {
+    capture.appendChild(canvas);
+  });
+  capture.parentNode.classList.toggle("visible");
+}
+
+// 2.8 Cierra el panel de la captura de la Grilla
+function closeCapture() {
+  capture.parentNode.classList.toggle("visible");
+}
+
 // #endregion
 
 // #region 3. EVENTS LISTENERS
@@ -97,7 +128,13 @@ function addEventsListener() {
     element.addEventListener("dragstart", (e) => e.preventDefault());
   });
 
-  resetButton.addEventListener("click", gridReset); // Al clickear el Boton de Reiniciar la Grilla
+  restartBtn.addEventListener("click", gridReset); // Al clickear el Boton de Reiniciar la Grilla
+
+  // gridSaveBtn.addEventListener("click", getGridCapture); // Al clickear el Boton de Reiniciar la Grilla
+
+  captureBtn.addEventListener("click", getGridCapture); // Al clickear el Boton de hacer una captura
+
+  closeBtn.addEventListener("click", closeCapture); // Al clickear el Boton de cerrar el panel de Captura
 }
 //#endregion
 

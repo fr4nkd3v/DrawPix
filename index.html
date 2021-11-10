@@ -22,8 +22,9 @@
   </head>
   <body>
     <div class="container">
-      <header></header>
-      <h1>Paint Grid</h1>
+      <header>
+        <h1>Paint Grid</h1>
+      </header>
       <div class="colors-container">
         <div class="color black"><i class="fas"></i></div>
         <div class="color white"><i class="fas"></i></div>
@@ -44,8 +45,51 @@
         <div class="painterGrid"></div>
       </section>
 
-      <button class="button" id="reset">Reset</button>
+      <section class="grid-options">
+        <button class="button" id="capture">
+          <i class="fas fa-camera-retro"></i> Capture
+        </button>
+
+        <button class="button" id="grid-save">
+          <i class="fas fa-save"></i> Save
+        </button>
+
+        <button class="button" id="restart">
+          <i class="fas fa-eraser"></i> Reset
+        </button>
+      </section>
+
+      <section class="capture-container">
+        <div class="capture-options">
+          <buton class="button" id="zoom">
+            <i class="fas fa-search-plus"></i>
+          </buton>
+
+          <buton class="button" id="capture-save">
+            <i class="fas fa-save"></i>
+          </buton>
+
+          <buton class="button" id="share">
+            <i class="fas fa-share-alt"></i>
+          </buton>
+
+          <buton class="button" id="copy">
+            <i class="fas fa-copy"></i>
+          </buton>
+        </div>
+
+        <div class="capture"></div>
+
+        <i id="close" class="far fa-times-circle"></i>
+      </section>
     </div>
     <script src="script.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"
+      integrity="sha512-tVYBzEItJit9HXaWTPo8vveXlkK62LbA+wez9IgzjTmFNLMBO1BEYladBw2wnM3YURZSMUyhayPCoLtjGh84NQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </body>
 </html>
