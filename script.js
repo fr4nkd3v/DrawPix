@@ -1,14 +1,20 @@
-// #region 1. VARIABLES DECLARATION
+// #region 1. VARIABLES
 
-let currentColor; //Color seleccionado de la aplicacion
+let currentColor; // Color seleccionado
+let isPressed = false; // Opción que determina si se mantiene presionado el pincel
+let width, height; // Ancho y alto del grid
 
-// Node Elements
-const colorBlocks = document.querySelectorAll(".color"); // Bloques de color
-const colorBlockActive = document.querySelector(".color.active"); // Bloque de Color activo
-const gridSection = document.querySelector(".painterGrid"); // Grila pintable
+// DOM Elements
+const paletteColor = document.querySelectorAll(".color"); // Bloques de color
+const paletteColorActive = document.querySelector(".color.active"); // Bloque de Color activo
+const gridSection = document.querySelector(".grid"); // Grila pintable
 const capture = document.querySelector(".capture"); // Bloque que contiene la captura de la Grilla
+let gridBlocks; // Cuadros de la Grilla pintable
 
-// Grid Buttons
+// Grid Options
+const inputWidth = document.querySelector('#width'); // Input del Ancho del grid
+const inputHeight = document.querySelector('#height'); // Input del Alto del grid
+const isPressedBtn = document.querySelector("#is-pressed"); // Boton para mantener presionado el pincel
 const restartBtn = document.getElementById("restart"); // Boton para resetear la Grilla
 const gridSaveBtn = document.getElementById("grid-save"); // Boton para guardar una imagen de la Grilla
 const captureBtn = document.getElementById("capture"); // Boton para tomar una captura de la Grilla
@@ -23,20 +29,58 @@ const closeBtn = document.querySelector("#close"); // Boton para cerrar el panel
 
 // #endregion
 
-// #region 2. MAIN FUNCTIONS
+// #region 2. FUNCTIONS
+
+function startApp() {
+  // 4.1 Renderizado de la Grilla
+  makeGrid(14, 14);
+  // 4.2 declaramos en variable los cuadros de la grilla
+  gridBlocks = document.querySelectorAll(".painterBlock"); // Cuadros de la Grilla pintable
+  
+  // 4.3 Selecciona el color negro
+  setCurrentColor("black", document.querySelector(".color.black"));
+}
 
 // 2.1 Crea la grilla para pintar
-function makeGrid() {
+function makeGrid(w, h) {
+  gridSection.innerHTML = '';
   // Hace doble for de 14 veces cada uno para crear una cuadricula de 14x14 cuadros
-  for (let j = 0; j < 14; j++) {
-    for (let i = 0; i < 14; i++) {
+  for (let j = 0; j < w; j++) {
+    for (let i = 0; i < h; i++) {
       //Se crea el cuadro, se le aplica su ID y clase y se añade al DOM
       let blockGrid = document.createElement("div");
       blockGrid.id = `block-${j}-${i}`;
       blockGrid.className = "painterBlock";
+
+      // Al clickear un Cuadro de la Grilla
+      blockGrid.addEventListener("mousedown", paintBlock);
+
+      // Al pasar el cursor por encima de un Cuadro de la Grilla
+      blockGrid.addEventListener("mouseenter", (e) => {
+        paintBlockHover(e);
+      });
+      // Al empezar a arrastrar un Cuadro de la Grilla
+      blockGrid.addEventListener("dragstart", (e) => e.preventDefault());
+
+      gridSection.style.gridTemplateColumns = `repeat(${w}, 2.5em)`;
+      gridSection.style.gridTemplateRows = `repeat(${h}, 2.5em)`;
       gridSection.appendChild(blockGrid);
     }
   }
+
+  // const widthSelector = document.querySelectorAll(`.painterBlock:nth-child(${w}n)`);
+  // widthSelector.forEach( element => {
+  //   element.style.borderRight = '1px solid #99999999';
+  // });
+
+  // const heightSelector = document.querySelectorAll(`.painterBlock:nth-child(-n + ${h})`);
+  // heightSelector.forEach(element => {
+  //   element.style.borderRight = '1px solid #99999999';
+  // });
+
+  width = w; height = h;
+  inputWidth.value = w; inputHeight.value = h;
+  
 }
 
 // 2.2 Seleccionar un color para el pintado de cuadros
@@ -47,7 +91,7 @@ function setCurrentColor(color, element = null) {
   //  Si realmente le han pasado un elemento nodo
   if (element !== null) {
     //Recorre todos los bloques de colores y les quita las clases de activo y a su icono ✅
-    colorBlocks.forEach((node) => {
+    paletteColor.forEach((node) => {
       node.classList.remove("active");
       node.firstChild.classList.remove("fa-check");
     });
@@ -69,7 +113,8 @@ function paintBlock(event) {
 function paintBlockHover(event) {
   let block = event.target;
   // Si al pasar por encima de un cuadro se mantiene presionado el click izquierdo del mouse, pinta con el color actual
-  if (event.buttons == 1) {
+
+  if (isPressed || event.buttons == 1) {
     block.style.backgroundColor = currentColor;
     block.classList.add("painted");
   }
@@ -107,26 +152,53 @@ function closeCapture() {
   capture.parentNode.classList.toggle("visible");
 }
 
+// 2.9 Cambia el valor de isPressed y el estilo del boton
+function switchIsPressed() {
+  isPressedBtn.className = isPressed === true ? "button" : "button active";
+  isPressed = isPressed === true ? false : true;
+}
+
+function isValidNumber(value) {
+  return Number.isInteger(value) ? true : false;
+}
+
 // #endregion
 
 // #region 3. EVENTS LISTENERS
 
-function addEventsListener() {
-  // Al clickear un Bloque de Color
-  // prettier-ignore
-  colorBlocks.forEach(
-    (element) => element.addEventListener( "click",
-      () => setCurrentColor( getColor(element), element ) )
-  );
+eventListeners();
+function eventListeners() {
 
-  gridBlocks.forEach((element) => {
-    // Al clickear un Cuadro de la Grilla
-    element.addEventListener("mousedown", paintBlock);
-    // Al pasar el cursor por encima de un Cuadro de la Grilla
-    element.addEventListener("mouseover", paintBlockHover);
-    // Al empezar a arrastrar un Cuadro de la Grilla
-    element.addEventListener("dragstart", (e) => e.preventDefault());
+  // Al cargar el DOM
+  document.addEventListener('DOMContentLoaded', startApp);
+  
+  paletteColor.forEach( (colorBlock) => {
+    // Al clickear un Bloque de Color
+    colorBlock.addEventListener( "click",
+      () => setCurrentColor( getColor(colorBlock), colorBlock ) );
+  } );
+
+  inputWidth.addEventListener('focusout', (e) => {
+    if (Number(e.target.value) !== width) {
+
+      if (isValidNumber(Number(e.target.value)))
+        makeGrid(Number(e.target.value), Number(inputHeight.value));
+      else
+        inputWidth.value = width;
+    }
   });
+
+  inputHeight.addEventListener('focusout', (e) => {
+    if (Number(e.target.value) !== height) {
+
+      if (isValidNumber(Number(e.target.value)))
+        makeGrid(Number(inputWidth.value), Number(e.target.value));
+      else
+        inputHeight.value = height;
+    }
+  });
+
+  isPressedBtn.addEventListener("click", switchIsPressed);
 
   restartBtn.addEventListener("click", gridReset); // Al clickear el Boton de Reiniciar la Grilla
 
@@ -136,17 +208,4 @@ function addEventsListener() {
 
   closeBtn.addEventListener("click", closeCapture); // Al clickear el Boton de cerrar el panel de Captura
 }
-//#endregion
-
-//#region 4. START APP
-
-// 4.1 Renderizado de la Grilla
-makeGrid();
-// 4.2 declaramos en variable los cuadros de la grilla
-const gridBlocks = document.querySelectorAll(".painterBlock"); // Cuadros de la Grilla pintable
-// 4.3 Agrega los Events Listener
-addEventsListener();
-// 4.4 Selecciona el color negro
-setCurrentColor("black", document.querySelector(".color.black"));
-
 //#endregion

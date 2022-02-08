@@ -10,22 +10,23 @@
       crossorigin="anonymous"
     ></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css" />
+
     <title>Document</title>
   </head>
+
   <body>
-    <div class="container">
-      <header>
-        <h1>Paint Grid</h1>
-      </header>
-      <div class="colors-container">
+    <header>
+      <h1>Paint Grid</h1>
+    </header>
+
+    <main>
+
+      <div class="color-palette">
         <div class="color black"><i class="fas"></i></div>
         <div class="color white"><i class="fas"></i></div>
         <div class="color red"><i class="fas"></i></div>
@@ -40,49 +41,76 @@
         <div class="color brown"><i class="fas"></i></div>
         <div class="color cherry"><i class="fas"></i></div>
       </div>
-
-      <section class="painterGrid-container">
-        <div class="painterGrid"></div>
+      
+      <section class="content-grid">
+        <div class="grid"></div>
       </section>
-
+      
       <section class="grid-options">
+        <div class="option">
+          
+          <div class="row title">
+            <i class="fas fa-th"></i>
+            <span>Grid</span>
+          </div>
+          <div class="row rw-width">
+            <span>W</span>
+            <input type="text" id="width">
+          </div>
+          <div class="row rw-height">
+            <span>H</span>
+            <input type="text" id="height">
+          </div>
+
+        </div>
+
+        <button class="button" id="is-pressed">
+          <div class="tooltip">Mantiene presionado el pincel</div>
+          <i class="fas fa-hand-point-up"></i>
+        </button>
+        
         <button class="button" id="capture">
-          <i class="fas fa-camera-retro"></i> Capture
+          <div class="tooltip">Toma una captura de la cuadrícula</div>
+          <i class="fas fa-camera-retro"></i>
         </button>
-
+        
         <button class="button" id="grid-save">
-          <i class="fas fa-save"></i> Save
+          <div class="tooltip">Guardar</div>
+          <i class="fas fa-save"></i>
         </button>
-
+        
         <button class="button" id="restart">
-          <i class="fas fa-eraser"></i> Reset
+          <div class="tooltip">Reinicia el color de la cuadrícula</div>
+          <i class="fas fa-eraser"></i>
         </button>
       </section>
-
+      
       <section class="capture-container">
         <div class="capture-options">
           <buton class="button" id="zoom">
             <i class="fas fa-search-plus"></i>
           </buton>
-
+      
           <buton class="button" id="capture-save">
             <i class="fas fa-save"></i>
           </buton>
-
+      
           <buton class="button" id="share">
             <i class="fas fa-share-alt"></i>
           </buton>
-
+      
           <buton class="button" id="copy">
             <i class="fas fa-copy"></i>
           </buton>
         </div>
-
+      
         <div class="capture"></div>
-
+      
         <i id="close" class="far fa-times-circle"></i>
       </section>
-    </div>
+
+    </main>
+
     <script src="script.js"></script>
 
     <script
