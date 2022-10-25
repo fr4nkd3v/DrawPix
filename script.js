@@ -2,20 +2,25 @@
 
 let currentColor; // Color seleccionado
 let isPressed = false; // Opción que determina si se mantiene presionado el pincel
+let isErasing = false; // Determina si se mantiene presionado el borrador
 let width, height; // Ancho y alto del grid
 
 // DOM Elements
 const paletteColor = document.querySelectorAll(".color"); // Bloques de color
 const paletteColorActive = document.querySelector(".color.active"); // Bloque de Color activo
-const gridSection = document.querySelector(".grid"); // Grila pintable
-const capture = document.querySelector(".capture"); // Bloque que contiene la captura de la Grilla
+const gridSection = document.querySelector(".paint-grid"); // Grila pintable
+const wrapperCapture = document.querySelector(".wrapper-capture"); // Bloque que contiene la captura de la Grilla
 let gridBlocks; // Cuadros de la Grilla pintable
 
 // Grid Options
 const inputWidth = document.querySelector('#width'); // Input del Ancho del grid
 const inputHeight = document.querySelector('#height'); // Input del Alto del grid
-const isPressedBtn = document.querySelector("#is-pressed"); // Boton para mantener presionado el pincel
-const restartBtn = document.getElementById("restart"); // Boton para resetear la Grilla
+
+const chbxPressed = document.querySelector("#pressed"); // Checkbox para mantener presionado el pincel
+const chbxErasing = document.querySelector("#erase-cell"); // Checkbox para mantener presionado el borrador
+
+const eraseAll = document.getElementById("erase-all"); // Boton para borrar la Grilla
+
 const gridSaveBtn = document.getElementById("grid-save"); // Boton para guardar una imagen de la Grilla
 const captureBtn = document.getElementById("capture"); // Boton para tomar una captura de la Grilla
 
@@ -39,6 +44,9 @@ function startApp() {
   
   // 4.3 Selecciona el color negro
   setCurrentColor("black", document.querySelector(".color.black"));
+
+  chbxErasing.checked = false;
+  chbxPressed.checked = false;
 }
 
 // 2.1 Crea la grilla para pintar
@@ -58,6 +66,7 @@ function makeGrid(w, h) {
       // Al pasar el cursor por encima de un Cuadro de la Grilla
       blockGrid.addEventListener("mouseenter", (e) => {
         paintBlockHover(e);
+        clearBlockHover(e);
       });
       // Al empezar a arrastrar un Cuadro de la Grilla
       blockGrid.addEventListener("dragstart", (e) => e.preventDefault());
@@ -120,10 +129,19 @@ function paintBlockHover(event) {
   }
 }
 
+function clearBlockHover({target}) {
+  let block = target;
+
+  if (isErasing) {
+    block.style.setProperty('background-color', 'initial');
+    block.classList.remove("painted");
+  }
+}
+
 // 2.5 Aplica el color blanco a todos los cuadros de la grilla
 function gridReset() {
   gridBlocks.forEach((element) => {
-    element.style.backgroundColor = "transparent";
+    element.style.backgroundColor = "initial";
     element.classList.remove("painted");
   });
 }
@@ -137,25 +155,48 @@ function getColor(element) {
 
 // 2.7 Genera una captura de la Grilla
 function getGridCapture() {
-  if (capture.firstChild) {
-    capture.firstElementChild.remove();
+  if (wrapperCapture.firstChild) {
+    wrapperCapture.firstElementChild.remove();
   }
 
   html2canvas(gridSection).then((canvas) => {
-    capture.appendChild(canvas);
+    wrapperCapture.appendChild(canvas);
   });
-  capture.parentNode.classList.toggle("visible");
+  wrapperCapture.parentNode.classList.toggle("visible");
 }
 
 // 2.8 Cierra el panel de la captura de la Grilla
 function closeCapture() {
-  capture.parentNode.classList.toggle("visible");
+  wrapperCapture.parentNode.classList.toggle("visible");
 }
 
-// 2.9 Cambia el valor de isPressed y el estilo del boton
+// 2.9 Cambia el valor de isPressed
 function switchIsPressed() {
-  isPressedBtn.className = isPressed === true ? "button" : "button active";
   isPressed = isPressed === true ? false : true;
+
+  if (isPressed){
+    gridSection.classList.add("pressed");
+    gridSection.classList.remove("erasing");
+  } else {
+    gridSection.classList.remove("pressed");
+  }
+  
+  chbxErasing.checked = false;
+  isErasing = false;
+}
+// Cambia el valor de isErasing
+function switchIsErasing() {
+  isErasing = isErasing === true ? false : true;
+
+  if (isErasing) {
+    gridSection.classList.add("erasing");
+    gridSection.classList.remove("pressed");
+  } else {
+    gridSection.classList.remove("erasing");
+  }
+
+  chbxPressed.checked = false;
+  isPressed = false;
 }
 
 function isValidNumber(value) {
@@ -178,6 +219,7 @@ function eventListeners() {
       () => setCurrentColor( getColor(colorBlock), colorBlock ) );
   } );
 
+  // Al quitar el foco del input de ancho y alto
   inputWidth.addEventListener('focusout', (e) => {
     if (Number(e.target.value) !== width) {
 
@@ -198,9 +240,12 @@ function eventListeners() {
     }
   });
 
-  isPressedBtn.addEventListener("click", switchIsPressed);
+  // Al cambiar el valor del check del checkbox "Presionar"
+  chbxPressed.addEventListener("change", switchIsPressed);
 
-  restartBtn.addEventListener("click", gridReset); // Al clickear el Boton de Reiniciar la Grilla
+  chbxErasing.addEventListener("change", switchIsErasing)
+
+  eraseAll.addEventListener("click", gridReset); // Al clickear el Boton de Reiniciar la Grilla
 
   // gridSaveBtn.addEventListener("click", getGridCapture); // Al clickear el Boton de Reiniciar la Grilla
 

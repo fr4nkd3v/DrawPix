@@ -5,23 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script
-      src="https://kit.fontawesome.com/4872505e1c.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://kit.fontawesome.com/4872505e1c.js" crossorigin="anonymous"></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&display=swap" rel="stylesheet"> -->
 
     <link rel="stylesheet" href="styles.css" />
 
-    <title>Document</title>
+    <title>DrawPix</title>
   </head>
 
   <body>
     <header>
-      <h1>Paint Grid</h1>
+      <h1>DRAWPIX</h1>
     </header>
 
     <main>
@@ -42,69 +39,119 @@
         <div class="color cherry"><i class="fas"></i></div>
       </div>
       
-      <section class="content-grid">
-        <div class="grid"></div>
+      <section class="content-paint-grid">
+        <div class="paint-grid"></div>
       </section>
       
-      <section class="grid-options">
-        <div class="option">
+      <section class="settings-container">
+
+        <div class="option grid">
           
           <div class="row title">
-            <i class="fas fa-th"></i>
-            <span>Grid</span>
+            <i class="fas fa-th"></i> <span>GRID</span>
           </div>
-          <div class="row rw-width">
-            <span>W</span>
+          
+          <div class="content">
+            <span>ANCHO</span>
             <input type="text" id="width">
-          </div>
-          <div class="row rw-height">
-            <span>H</span>
+            <span>ALTO</span>
             <input type="text" id="height">
           </div>
 
         </div>
 
-        <button class="button" id="is-pressed">
-          <div class="tooltip">Mantiene presionado el pincel</div>
-          <i class="fas fa-hand-point-up"></i>
-        </button>
+        <div class="option pressed">
+
+          <div class="row title">
+            <i class="fas fa-paint-brush"></i> <span>PRESIONAR</span>
+          </div>
+
+          <div class="row content wrapper-switch-btn">
+            <input type="checkbox" name="pressed" id="pressed">
+
+            <label for="pressed">
+              <div class="switch-btn">
+                <div class="circle"></div>
+              </div>
+            </label>
+
+            <i class="fas fa-hand-pointer"></i>
+          </div>
+
+        </div>
+
+        <div class="option erase">
+
+          <div class="row title">
+            <i class="fas fa-eraser"></i> <span>BORRAR</span>
+          </div>
+
+          <div class="content">
+
+            <div class="row wrapper-switch-btn">
+              <input type="checkbox" name="erase-cell" id="erase-cell">
+              
+              <label for="erase-cell">
+                <div class="switch-btn">
+                  <div class="circle"></div>
+                </div>
+              </label>
+              
+              <i class="fas fa-mouse-pointer"></i>
+            </div>
+
+            <div class="row wrapper-switch-btn">
+              
+              <button class="btn" id="erase-all">
+                <span>TODO</span>
+                <i class="fas fa-th"></i>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="option capture">
+          <div class="row">
+            <button class="btn" id="capture">
+              <span>CAPTURAR</span>
+              <i class="fas fa-camera-retro"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="option save">
+          <div class="row">
+            <button class="btn" id="save">
+              <span>GUARDAR</span>
+              <i class="fas fa-save"></i>
+            </button>
+          </div>
+        </div>
         
-        <button class="button" id="capture">
-          <div class="tooltip">Toma una captura de la cuadrícula</div>
-          <i class="fas fa-camera-retro"></i>
-        </button>
-        
-        <button class="button" id="grid-save">
-          <div class="tooltip">Guardar</div>
-          <i class="fas fa-save"></i>
-        </button>
-        
-        <button class="button" id="restart">
-          <div class="tooltip">Reinicia el color de la cuadrícula</div>
-          <i class="fas fa-eraser"></i>
-        </button>
       </section>
       
       <section class="capture-container">
         <div class="capture-options">
-          <buton class="button" id="zoom">
+          <buton class="btn" id="zoom">
             <i class="fas fa-search-plus"></i>
           </buton>
       
-          <buton class="button" id="capture-save">
+          <buton class="btn" id="capture-save">
             <i class="fas fa-save"></i>
           </buton>
       
-          <buton class="button" id="share">
+          <buton class="btn" id="share">
             <i class="fas fa-share-alt"></i>
           </buton>
       
-          <buton class="button" id="copy">
+          <buton class="btn" id="copy">
             <i class="fas fa-copy"></i>
           </buton>
         </div>
       
-        <div class="capture"></div>
+        <div class="wrapper-capture"></div>
       
         <i id="close" class="far fa-times-circle"></i>
       </section>
