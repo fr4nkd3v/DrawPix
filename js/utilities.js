@@ -1,6 +1,6 @@
 
 // FUNCIONES DE TIPO "UTILIDADES" QUE RECIBEN Y RETORNAN VALORES
-// Similares a las funciones puras, son atilidades para las funciones principales
+// Similares a las funciones puras, son utilidades para las funciones principales
 
 
 // A (String) Devuelve el background-color de un elemento
@@ -15,9 +15,13 @@ const getColor = element => {
 // B (Boolean) Valida si un dato ingresado es un número
 //   Recibe un número (o debería)
 //   Retorna true o false
-const isValidNumber = value => Number.isInteger(value)
+const isValidNumber = value => Number.isInteger(value);
 
 // C (Boolean) Verifica si un nombre es válido
 //   Recibe un String
 //   Retorna true o false
-const isValidName = str => (str.trim().length > 0)
+const isValidName = str => (str.trim().length > 0);
+
+// D (String)
+// Retorna un timestamp en formato string a modo de ID +unico
+const getId = () => new Date().getTime().toString();

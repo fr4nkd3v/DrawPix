@@ -1,224 +1,389 @@
 
 // #region PRINCIPAL FUNCTIONS
 
-// 1 Inicia la Aplicación
+// 1. Inicia la Aplicación
 function startApp() {
   
-  // 1 Renderizado de la Grilla tomando ancho x alto
-  makeGrid(appSettings.width, appSettings.height);
+  // 2 Establecemos el valor de los checkbox
+  chbxPressedErase.checked = false;
+  chbxPressedBrush.checked = false;
 
-  // 2 Establece el color seleccionado en negro
-  setCurrentColor("black", document.querySelector(".color.black"));
-
-  // 3 Establecemos el valor de los checkbox
-  chbxErasing.checked = false;
-  chbxPressed.checked = false;
+  // 3 Deshabilitamos la Paleta de Colores y la sección de config
+  enableDisableElement(sectionSettings, false);
+  enableDisableElement(divColorPalette, false);
 
   // 4 Lista los Lienzos guardados
-  updateDesignsList();
+  listDesigns();
 }
 
-// 2 Crea el Lienzo (Grilla)
-function makeGrid(w, h) {
-  gridSection.innerHTML = ''; // 1 Elimina los elementos HTML del Lienzo
+// . Abre/Cierra DesignsBar
+function openCloseDesignsbar() {
+  // toggle classes CSS
+  btnMenuDesigns.classList.toggle('is-active');
+  sectionDesignsBar.classList.toggle('is-closed');
 
-  // 2 Recorre dos bucles para crear los BLOQUES del Lienzo
-  // Las itereaciones de cada bucle se definen por el ancho y alto en la variable appSettings
-  for (let j = 0; j < w; j++) {
-    for (let i = 0; i < h; i++) {
-      // 3 Se crea el BLOQUE con id, clase y se inserta en el DOM
+  const isNotClosed = !sectionDesignsBar.classList.contains('is-closed'); // is open?
+
+  // Change Texts
+  sectionDesignsBar.querySelector('.WithoutDesigns-note').innerHTML =
+    isNotClosed ? "Crea uno <span>Nuevo</span> aquí mismo :D" : "Crea uno<br/><span>Nuevo</span>";
+  sectionDesignsBar.querySelector('.WithoutDesigns-subtitle').innerHTML =
+    isNotClosed ? "<p> AUN NO TIENES</p><p>LIENZOS</p>" : "<p>SIN</p><p>LIENZOS</p>";
+}
+
+// . Muestra/Oculta Welcome Container
+// Recibe un boolean, si es true muestra el contenedor, si es false lo oculta
+const showHideWelcomeContainer = (bool) => divWelcomeContainer.style.display = bool ? "block" : "none";
+
+// . Muestra/Oculta la Grilla Principal de la App
+// Recibe un boolean, si es true muestra el contenedor, si es false lo oculta
+const showHideAppGrid = (bool) => sectionAppGrid.style.display = bool ? "flex" : "none";
+
+// . Muestra/Oculta el Contenedor de Modales
+function showHideModalContainer(bool) {
+  // Resetea los valores
+  inputModalHeight.value = "";
+  inputModalWidth.value = "";
+
+  if (bool) { // "Muestra"
+    sectionModalContainer.classList.add("is-visible");
+    inputModalWidth.focus();
+  } else // "Oculta"
+    sectionModalContainer.classList.remove("is-visible");
+}
+
+// . Habilitar/Deshabilitar un Elemento
+// Genera un div a modo de muro que bloquea la interacción con el elemento
+// Recibe un boolean, si es true "habilita" el elemento, si es false lo "deshabilita"
+function enableDisableElement(element, bool) {
+
+  if (bool) { // "Habilitar"
+
+    const wall = element.querySelector(".Wall");
+    if (wall) wall.remove();
+
+  } else { // "Deshabilitar"
+
+    // Si ya tiene un elemento Wall sale de la función
+    const wallIsExists = element.querySelector(".Wall");
+    if (wallIsExists) return;
+
+    // Si no tiene algún posicionamiento le aplicamos relative
+    let position = window.getComputedStyle(element, null).getPropertyValue("position");
+    if (position === "static") element.style.position = "relative";
+    
+    // Creamos el div muro y lo agregamos
+    const wall = document.createElement("div");
+    wall.classList.add("Wall");
+    element.appendChild(wall);
+  }
+}
+
+// . Muestra/Oculta el ContextMenu de Diseños
+function showHideContextMenuDesigns(bool, coords = { y: 0, x: 0 }) {
+  if (bool) { // "Mostrar" y lo ubica en pantalla
+    contextMenuDesigns.classList.remove("is-hidden");
+    contextMenuDesigns.style.top = `${coords.y}px`;
+    contextMenuDesigns.style.left = `${coords.x}px`;
+  } else { // "Ocultar"
+    contextMenuDesigns.classList.add("is-hidden");
+    contextMenuDesigns.style.top = "0px";
+    contextMenuDesigns.style.left = "0px";
+  }
+}
+
+// . Crea una instancia de un nuevo Diseño y lo agrega a la lista
+function createDesign(objArgs) {
+
+  let { id, name, width, height, html } = objArgs; // 1 Destructuring
+
+  // 2 Asigna valores por defecto
+  if (!id) id = getId();
+  if (!name) name = "Sin título";
+  if (!width) width = 14;
+  if (!height) height = 14;
+  if (!html) html = sectionAppGrid.innerHTML;
+
+  // 3 Instancia nuevo Diseño y lo agrega a la lista
+  const design = new Design(id, name, width, height, html);
+  App.addDesign(design);
+
+  // 4 seleccionar la key del diseño actual
+  App.selectedDesignKey = id;
+
+  // 5 Lista los diseños
+  listDesigns();
+}
+
+// . Genera la Grilla
+// Recibe los parámetros de ancho y alto
+function generateGrid(width, height) {
+  sectionAppGrid.innerHTML = ''; // 1 Elimina los elementos HTML del Lienzo
+
+  // 2 Genera el elemento que envuelve la Grilla
+  const wrapperGrid = document.createElement("div");
+  wrapperGrid.classList.add("AppGrid-wrapper");
+  sectionAppGrid.appendChild(wrapperGrid);
+
+  // 3 Recorre dos bucles para crear los BLOQUES del Lienzo
+  // Las iteraciones de cada bucle se definen por el ancho y alto pasados en argumentos
+  for (let j = 0; j < width; j++) {
+    for (let i = 0; i < height; i++) {
+      // 4 Se crea el elemento BLoque con id, clase y se inserta en el DOM
       const blockGrid = document.createElement('div');
       blockGrid.id = `block-${j}-${i}`;
-      blockGrid.classList.add('painter-block');
+      blockGrid.classList.add('AppGrid-block');
 
-      gridSection.style.setProperty('grid-template-columns', `repeat(${w}, 2.5em)`);
-      gridSection.style.setProperty('grid-template-rows', `repeat(${h}, 2.5em)`);
-      gridSection.appendChild(blockGrid);
+      wrapperGrid.appendChild(blockGrid);
     }
   }
-  // 4 Establecemos el valor de los input alto - ancho
-  inputWidth.value = w; inputHeight.value = h;
+  
+  // 4 Definimos el valor de las columnas y filas para los estilos grid
+  // Extendemos el ancho y alto de contenedor
+  wrapperGrid.style.setProperty("width", "100%");
+  wrapperGrid.style.setProperty("height", "100%");
+  let lengthBlock = "";
+
+  const getBlockWidth = () => {
+    // Entonces el width será de 1fr para calcular su ancho
+    wrapperGrid.style.setProperty('grid-template-columns', `repeat(${width}, 1fr)`);
+    wrapperGrid.style.setProperty('grid-template-rows', `repeat(${height}, 1px)`);
+    
+    // Obtener el ancho de un bloque
+    const block = document.querySelector(".AppGrid-block");
+    lengthBlock = window.getComputedStyle(block, null).getPropertyValue("width");
+  }
+
+  const getBlockHeight = () => {
+    // Entonces el height será de 1fr para calcular su alto
+    wrapperGrid.style.setProperty('grid-template-rows', `repeat(${height}, 1fr)`);
+    wrapperGrid.style.setProperty('grid-template-columns', `repeat(${width}, 1px)`);
+
+    // Obtener el alto de un bloque
+    const block = document.querySelector(".AppGrid-block");
+    lengthBlock = window.getComputedStyle(block, null).getPropertyValue("height");
+  }
+
+  // Dependiendo del alto o ancho de la grilla y del contenedor se rellenan las columnas o filas y obtenemos la longitud
+  appGridHeight = Number(window.getComputedStyle(sectionAppGrid, null).getPropertyValue("height").slice(0, -2));
+  appGridWidth = Number(window.getComputedStyle(sectionAppGrid, null).getPropertyValue("width").slice(0, -2));
+
+  if (appGridHeight > appGridWidth) getBlockWidth()
+    else
+  if (appGridHeight < appGridWidth) getBlockHeight()
+    else
+  if (appGridHeight === appGridWidth) {
+    if (width > height || width === height) getBlockWidth();
+    else if (height > width) getBlockHeight();
+  }
+
+  // 
+  wrapperGrid.style.setProperty('grid-template-rows', `repeat(${height}, ${lengthBlock})`);
+  wrapperGrid.style.setProperty('grid-template-columns', `repeat(${width}, ${lengthBlock})`);
+
+  wrapperGrid.style.setProperty("width", "auto");
+  wrapperGrid.style.setProperty("height", "auto");
+
+  // 5 Establece el color seleccionado en negro y resetea el valor del input color
+  setCurrentColor("black", document.querySelector(".ColorPalette-color.u-black"));
+  inputColorPicker.value = "";
+
+  // 6 Habilita Paleta de colores y Sección Config
+  enableDisableElement(sectionSettings, true);
+  enableDisableElement(divColorPalette, true);
+
+  // 7 Establece el valor de los input width y height
+  // inputGridWidth.value = width;
+  // inputGridHeight.value = height;
 }
 
 // 3 Carga la lista de lienzos guardados
-function updateDesignsList() {
-  // Función Local Para agregar el Boton de "Nuevo Lienzo"
-  const insertBtnNewDesign = () => {
-    const newDesign = document.createElement('div');
-    newDesign.classList.add('new-design');
-    newDesign.innerHTML = '<i class="fas fa-plus"></i><span>NUEVO LIENZO</span>';
-    designsList.appendChild(newDesign);
-  }
-  // 1 Elimina los Lienzos que puedan haber en la Lista
-  const designs = document.querySelectorAll('.my-designs .content > .design');
-  designs.forEach( design => design.remove() );
-  const btnNew = document.querySelector('.my-designs .content > .new-design');
-  if (btnNew) btnNew.remove();
+function listDesigns() {
 
-  // 2 Si no tiene ningún lienzo guardado
-  if (!Object.keys(appSettings.designs).length) {
+  // 1 Elimina los diseños que puedan haber en la Lista
+  divDesignsList.innerHTML = "";
+
+  // 2 Si no tiene ningún diseño guardado
+  if (!Object.keys(App.designs).length) {
     // Muestro el elemento "sin lienzos" y salgo de la función
-    divAnyDesigns.style.setProperty('display', 'flex');
-    insertBtnNewDesign(); // Agrega el boton de Nuevo Lienzo
+    divWithoutDesigns.style.setProperty('display', 'flex');
     return;
   }
 
-  // 3 Si tiene lienzos guardados
-  for (const key in appSettings.designs) {
-    // 3 Crea el elemento del lienzo con clase, eventListener y subelementos
-    const nodeDesign = document.createElement('div');
-    nodeDesign.classList.add('design');
+  // 3 Si tiene diseños guardados
+  for (const key in App.designs) {
 
-    if (key === appSettings.currentDesign)
-      nodeDesign.classList.add('selected')
+    // 3 Crea el elemento del diseño con clase y sub-elementos
+    const elementDesign = document.createElement('div');
+    elementDesign.classList.add('DesignsList-design');
 
-    // nodeDesign.addEventListener('click', () => gridSection.innerHTML = appSettings.designs[key] );
-    nodeDesign.dataset.key = key;
-    nodeDesign.innerHTML = `<i class="fas fa-shapes"></i><span>${key}</span>`;
+    // 4 Si hay un diseño seleccionado aplica las clases correspondientes
+    if (key === App.selectedDesignKey)
+      elementDesign.classList.add('is-selected');
 
-    // 4 Agrego el lienzo a la Lista
-    designsList.appendChild(nodeDesign);
+    // 5 Agrega estructura y data-key    
+    elementDesign.dataset.key = key;
+    elementDesign.innerHTML =
+    `<svg class="DesignsList-designIcon">
+      <use xlink:href="./assets/design-icon.svg#icon" />
+    </svg>
+    <div class="DesignsList-designIndicator"></div>
+    <span class="DesignsList-designName">${App.designs[key].name}</span>
+    <div class="DesignsList-designMenu">
+      <div></div><div></div><div></div>
+    </div>`;
+
+    // 6 Si el html es el mismo al de la grilla aplica clases al Indicador
+    const isHtmlEquals = (App.designs[key].html === sectionAppGrid.innerHTML);
+    elementDesign.querySelector(".DesignsList-designIndicator")
+      .classList.add(isHtmlEquals ? "is-saved" : "is-notSaved")
+    
+    // 7 Agrego el lienzo a la Lista
+    divDesignsList.appendChild(elementDesign);
   }
   
-  // 5 Oculto el elemento "sin lienzos"
-  divAnyDesigns.style.setProperty('display', 'none');
-
-  insertBtnNewDesign(); // 6 Agrega el boton de Nuevo Lienzo
-  
+  // 8 Oculto el elemento "sin lienzos"
+  divWithoutDesigns.style.setProperty('display', 'none');
 }
 
-// 3 Seleccionar un color para el pintado de cuadros
+// 4 Seleccionar un color para el pintado de cuadros
 function setCurrentColor(color, element) {
   // 1 Asigna el color del parámetro al color actual
-  appSettings.currentColor = color;
+  App.selectedColor = color;
 
   // 2 Si no le pasaron un elemento cierra la función
-  if (element == undefined) return;
+  if (element === undefined) return;
 
   // 3 Retira la clase active a quien la tenga
-  const oldColor = document.querySelector('.color.active');
-  if (oldColor) oldColor.classList.remove("active");
+  const oldColor = document.querySelector('.ColorPalette-color.is-active');
+  if (oldColor) oldColor.classList.remove("is-active");
   
   // 4 Agrega la clase active al bloque de color seleccionado
-  element.classList.add("active");
+  element.classList.add("is-active");
 }
 
-// 4 Pinta un cuadro de la grilla con el color actual seleccionado
-function paintBlock({target}) {
+// . Aplica los estilos de diseño no guardado
+function setSavedUnsavedDesign(bool) {
 
-  // 1 Valida si hay un elemento bloque ascendente
-  const block = target.closest('.paint-grid > .painter-block');
-  if (!block) return; // Si no lo hay sale de la funcion
+  // 1 Obtiene el indicador del elemento del diseño seleccionado
+  const indicator = document.querySelector(".DesignsList-design.is-selected .DesignsList-designIndicator");
+  if (!indicator) return; // Si el elemento no existe sale de la función
+  
+  // 2 Si es true aplica estilos de Guardado
+  // Si es false aplica estilos de NO-Guardado
+  const addClass = bool ? "is-saved" : "is-notSaved";
+  const removeClass = bool ? "is-notSaved" : "is-saved";
 
-  // 2 Si lo hay cambia su color
-  block.style.setProperty('background-color', appSettings.currentColor);
-  block.classList.add("painted");
+  // 3 Elimina la clase a remover y agrega la clase a añadir
+  indicator.classList.remove(removeClass);
+  indicator.classList.add(addClass);
 }
 
-// 5 Pinta o Limpia un cuadro de la grilla en HOVER
-function blockHover({target}) {
-  // 1 Valida si hay un elemento bloque ascendente
-  const block = target.closest('.paint-grid > .painter-block');
-  if (!block) return; // Si no lo hay sale de la funcion
+// 5 Pinta un cuadro de la grilla con el color actual seleccionado
+function paintBlock(element) {
+  // 1 Cambia el color del elemento
+  element.style.setProperty('background-color', App.selectedColor);
+  element.classList.add("painted");
 
-  // Si lo hay:
-  // 2 Si "isPressed" es true y mantiene presionado el click derecho
-  // entonces pinta con el color actual
-  if (appSettings.isPressed || event.buttons == 1) {
-    block.style.setProperty("background-color", appSettings.currentColor);
-    block.classList.add("painted");
+  setSavedUnsavedDesign(false);
+}
 
-  // 3 Si "isErasing" es true pinta con el color actual
-  } else if (appSettings.isErasing) {
-    target.style.setProperty('background-color', 'initial');
-    target.classList.remove("painted");
+// 6 Pinta o Limpia un cuadro de la grilla en HOVER
+function blockHover(element, evtButton) {
+  
+  // 1 Si está presionando el pincel ó si mantiene presionado el click derecho
+  // Pinta con el color actual
+  if (App.isBrushPressed || evtButton == 1) {
+    element.style.setProperty("background-color", App.selectedColor);
+    element.classList.add("painted");
+
+    setSavedUnsavedDesign(false);
+
+  // 2 Si está presionando el borrador pinta con el color actual
+  } else if (App.isEraserPressed) {
+    element.style.setProperty('background-color', 'initial');
+    element.classList.remove("painted");
+
+    setSavedUnsavedDesign(false);
   }
-
 }
 
-// 6 Limpia todos los cuadros de la grilla
+// 7 Limpia todos los cuadros de la grilla
 function resetGrid() {
-  const gridBlocks = document.querySelectorAll(".painter-block");
+  const gridBlocks = document.querySelectorAll(".AppGrid-block");
   gridBlocks.forEach((element) => {
     element.style.backgroundColor = "initial";
     element.classList.remove("painted");
   });
 }
 
-// 7 Genera una captura de la Grilla
-function getGridCapture() {
-  // 1 SI ya existe una captura se elimina
-  if (wrapperCapture.firstChild)
-    wrapperCapture.firstElementChild.remove();
+// 8 Genera una captura de la Grilla
+// function getGridCapture() {
+//   // 1 SI ya existe una captura se elimina
+//   if (wrapperCapture.firstChild)
+//     wrapperCapture.firstElementChild.remove();
 
-  // 2 Reseteamos la sombra porque genera resultados inesperados con la captura
-  gridSection.style.setProperty('box-shadow', 'initial');
+//   // 2 Reseteamos la sombra porque genera resultados inesperados con la captura
+//   sectionAppGrid.style.setProperty('box-shadow', 'initial');
 
-  // 3
-  html2canvas(gridSection).then((canvas) => {
-    wrapperCapture.appendChild(canvas);
-  });
-  modalContainer.classList.toggle("visible");
-  modalCapture.classList.add("visible");
+//   // 3
+//   html2canvas(sectionAppGrid).then((canvas) => {
+//     wrapperCapture.appendChild(canvas);
+//   });
+//   sectionModalContainer.classList.toggle("visible");
+//   articleCaptureModal.classList.add("visible");
 
-  // 4 
-  gridSection.style.setProperty('box-shadow', '0 0 50px 10px rgba(0, 0, 0, .5)');
-}
-
-// 8 Cierra el panel de la captura de la Grilla
-function closeModalContainer() {
-  modalContainer.classList.toggle("visible");
-  modalContainer.children[0].classList.remove('visible');
-  modalContainer.children[1].classList.remove('visible');
-}
+//   // 4 
+//   sectionAppGrid.style.setProperty('box-shadow', '0 0 50px 10px rgba(0, 0, 0, .5)');
+// }
 
 // 9 Cambia el valor de isPressed
-function switchIsPressed(bool = null) {
+function switchIsBrushPressed(bool = null) {
   if (bool === null) return; // 1 Si no indicaron el valor sale de la funcion
 
   // 2 Aplica cambios dependiendo de su valor
   if (bool) {
     // Cambio en las propiedades
-    appSettings.isPressed = true;
-    appSettings.isErasing = false;
+    App.isBrushPressed = true;
+    App.isEraserPressed = false;
 
     // Cambios en el grid
-    gridSection.classList.add("pressed");
-    gridSection.classList.remove("erasing");
+    sectionAppGrid.classList.add("is-brushPressed");
+    sectionAppGrid.classList.remove("is-eraserPressed");
 
     // Cambios en checkbox
-    chbxPressed.checked = true;
-    chbxErasing.checked = false;
+    chbxPressedBrush.checked = true;
+    chbxPressedErase.checked = false;
 
   } else {
-    appSettings.isPressed = false; // Cambio en la propiedad
-    gridSection.classList.remove("pressed"); // Cambios en el grid
-    chbxPressed.checked = false; // Cambios en checkbox
+    App.isBrushPressed = false; // Cambio en la propiedad
+    sectionAppGrid.classList.remove("is-brushPressed"); // Cambios en el grid
+    chbxPressedBrush.checked = false; // Cambios en checkbox
   }
 }
 
 // 10 Cambia el valor de isErasing
-function switchIsErasing(bool = null) {
+function switchIsEraserPressed(bool = null) {
   if (bool === null) return; // Si no indicaron el valor sale de la funcion
 
   // 1 Aplica cambios dependiendo de su valor
   if (bool) {
     // Cambio en las propiedades
-    appSettings.isErasing = true;
-    appSettings.isPressed = false;
+    App.isEraserPressed = true;
+    App.isBrushPressed = false;
 
     // Cambios en el grid
-    gridSection.classList.add("erasing");
-    gridSection.classList.remove("pressed");
+    sectionAppGrid.classList.add("is-eraserPressed");
+    sectionAppGrid.classList.remove("is-brushPressed");
 
     // Cambios en checkbox
-    chbxErasing.checked = true;
-    chbxPressed.checked = false;
+    chbxPressedErase.checked = true;
+    chbxPressedBrush.checked = false;
 
   } else {
-    appSettings.isErasing = false; // Cambio en la propiedad
-    gridSection.classList.remove("erasing"); // Cambios en el grid
-    chbxErasing.checked = false; // Cambios en checkbox
+    App.isEraserPressed = false; // Cambio en la propiedad
+    sectionAppGrid.classList.remove("is-eraserPressed"); // Cambios en el grid
+    chbxPressedErase.checked = false; // Cambios en checkbox
   }
   
 }
@@ -228,159 +393,112 @@ function switchIsErasing(bool = null) {
 function createColor(strColor) {
   
   // 1 Crea el elemento con su clase, backgroundColor y su eventListener
-  const nodeColor = document.createElement("div");
-  nodeColor.classList.add("color");
-  nodeColor.style.setProperty("background-color", strColor);
+  const elementColor = document.createElement("div");
+  elementColor.classList.add("ColorPalette-color");
+  elementColor.style.setProperty("background-color", strColor);
   
-  // nodeColor.addEventListener("click", () => setCurrentColor(strColor, nodeColor) );
+  // 2 Inserta su icono interno
+  elementColor.innerHTML =
+    `<svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>`;
   
-  // 2 Crea su icono interno y lo inserta
-  const i = document.createElement("i");
-  i.classList.add("fas", "fa-check");
-  nodeColor.appendChild(i);
   
   // 3 Inserta el elemento en el DOM
-  colorPalette.appendChild(nodeColor);
+  divColorPalette.appendChild(elementColor);
 
   // VALIDACION:
   // Si la paleta ya tiene 40 elementos o más
   // entonces se agregará el color,
   // pero se elimina el primer color ingresado por el usuario
-  if (colorPalette.childElementCount >= 40)
-    colorPalette.children[14].remove();
-
+  if (divColorPalette.childElementCount >= 40)
+    divColorPalette.children[14].remove();
 }
 
-// 12 Muestra el Contenedor del Modal y el Modal "Guardar"
-function showModalSaveName() {
-  modalContainer.classList.toggle('visible');
-  modalSaveName.classList.add('visible');
-  inputNameDesign.focus();
-  inputNameDesign.value = '';
-}
+// Guarda el Diseño Seleccionado
+function saveDesign() {
+  // 1 Valida si existe un elemento seleccionado
+  const selectedDesign = document.querySelector(".DesignsList-design.is-selected");
+  if (!selectedDesign) return; // Si no existe sale de la función
 
-// 13 Guarda un Lienzo con su nombre
-function saveNewDesign() {
-  // 1 Valida el nombre del Lienzo a Guardar
-  const name = inputNameDesign.value;
+  // 2 Guardar el html del grid en la variable que tiene el objeto del diseño seleccionado
+  const key = selectedDesign.dataset.key;
+  App.designs[key].html = sectionAppGrid.innerHTML
 
-  // 2 Si es inválido llama otra función y sale de ésta
-  if (!isValidName(name)) {
-    // Instrucciones indicando que el nombre está mal
-    alert('Nombre Incorrecto\nIngrese un nombre válido');
-    return;
-  }
-
-  // 3 Guarda el lienzo con su respectivo nombre
-  appSettings.designs[name] = gridSection.innerHTML;
-
-  // 4 Establece el Lienzo Actual con su nombre
-  appSettings.currentDesign = name;
-
-  // 5 Actualizamos la Lista de Lienzos, Cerramos el Contenedor del Modal y Reseteamos la Grilla del Lienzo
-  updateDesignsList();
-  closeModalContainer();
-  resetGrid()
+  // 3 Aplica los estilos de guardado
+  setSavedUnsavedDesign(true);
 }
 
 
 
 // Handle Functions
-function handlerBtnDesignsbarClick() {
-  btnDesignsbar.classList.toggle('active');
-  designsSection.classList.toggle('open');
-}
-
-function handleFocusoutInputWith({ target: { value } }) {
+function handlerFocusoutInputWith({ target: { value } }) {
   // VALIDACION:
   // Si el numero es invalido, cambia su valor y sale de la función
   if (!isValidNumber(Number(value))) {
-    inputWidth.value = appSettings.width;
+    inputGridWidth.value = App.width;
     return;
   }
 
   // 1 Si el valor del input y el ancho de la config son diferentes
   // Rehace el lienzo con los nuevos valores
-  if (Number(value) !== appSettings.width)
-    makeGrid(Number(value), Number(inputHeight.value));
+  if (Number(value) !== App.width)
+    generateGrid(Number(value), Number(inputGridHeight.value));
 }
 
-function handleFocusoutInputHeight({ target: { value } }) {
+function handlerFocusoutInputHeight({ target: { value } }) {
   // VALIDACION:
   // Si el numero es invalido, cambia su valor y sale de la función
   if (!isValidNumber(Number(value))) {
-    inputHeight.value = appSettings.height;
+    inputGridHeight.value = App.height;
     return;
   }
 
   // 2 Si el valor del input y el ancho de la config son diferentes
   // Rehace el lienzo con los nuevos valores
-  if (Number(value) !== appSettings.height)
-    makeGrid(Number(inputWidth.value), Number(value));
+  if (Number(value) !== App.height)
+    generateGrid(Number(inputGridWidth.value), Number(value));
 }
 
-function handleKeydownDocument(evt) {
-  if (evt.key === 'Control') switchIsPressed(true);
-  if (evt.key === 'Shift') switchIsErasing(true);
+function handlerKeydownDocument(evt) {
+  if (evt.key === 'Control') switchIsBrushPressed(true);
+  if (evt.key === 'Shift') switchIsEraserPressed(true);
 }
 
-function handleKeyupDocument(evt) {
-  if (evt.key === 'Control') switchIsPressed(false);
-  if (evt.key === 'Shift') switchIsErasing(false);
+function handlerKeyupDocument(evt) {
+  if (evt.key === 'Control') switchIsBrushPressed(false);
+  if (evt.key === 'Shift') switchIsEraserPressed(false);
 }
 
-function handlerChangeInputColor(evt) {
-  createColor(evt.target.value);
-}
-
-function handleClickColor(evt) {
+function handlerClickColor(evt) {
   // 1 Busca el ancestro mas cercano al elemento .color
-  const nodeColor = evt.target.closest('.color-palette > .color');
-
+  const nodeColor = evt.target.closest('#ColorPalette > .ColorPalette-color');
   if (!nodeColor) return; // 2 Si no lo encontró sale de la función
 
   // 3 Establecemos el color
   setCurrentColor(getColor(nodeColor), nodeColor);
 }
 
-function handleInputNameDesignKeydown(evt) {
-  if (evt.key == 'Enter') saveNewDesign();
-}
+function handlerClickWelcomeOptions(evt) {
+  const template = evt.target.closest(".WelcomeContainer-template");
+  
+  if (!template) return;
 
-function handlerClickBtnSave() {
-  // 1 Si no tiene un Lienzo Seleccionado
-  if (!appSettings.currentDesign) {
-    alert('No ha seleccionado ningún Lienzo\nSeleccione uno para guardar los cambios');
+  if (template.id === "CustomTemplate") {
+    showHideModalContainer(true);
     return;
   }
-  // Si lo tiene:
-  // Entonces guarda los cambios en el Lienzo correspondiente
-  appSettings.designs[appSettings.currentDesign] = gridSection.innerHTML;
   
+  const {width, height} = template.dataset;
+
+  showHideWelcomeContainer(false); // Oculta sección de Bienvenida
+  showHideAppGrid(true); // Muestra la Grilla de la App
+
+  generateGrid(width, height); // Crea una grilla
+  createDesign({ width, height }); // Crea el diseño y lo guarda
 }
 
-function handlerClickDesignsList(evt) {
-  const btnNewDesign = evt.target.closest('.my-designs > .content > .new-design');
-  const divDesign = evt.target.closest('.my-designs > .content > .design');
-  
-  // 1 Si dió click en el Botón "Nuevo Lienzo"
-  if (btnNewDesign) {
-    showModalSaveName(); // Muestra el Modal para ingresar el nombre
-
-  // 2 Si dió click en un Lienzo de la Lista
-  } else if (divDesign) {
-    // a Muestra el Lienzo seleccionado en la grilla
-    const key = divDesign.dataset.key;
-    gridSection.innerHTML = appSettings.designs[key];
-    // b Selecciona el Lienzo en la variable "currentDesign"
-    appSettings.currentDesign = key;
-    // c Quita la clase "selected" al anterior seleccionado y lo aplicamos al actual
-    const prevDesign = document.querySelector('.my-designs .design.selected');
-    prevDesign.classList.remove('selected');
-    divDesign.classList.add('selected');
-  }
-
-  
+function handlerInputNumber() {
+  const newText = this.value.replace(/\D/g, "");
+  this.value = newText;
 }
 
 // #endregion
@@ -390,60 +508,196 @@ function handlerClickDesignsList(evt) {
 eventListeners();
 function eventListeners() {
 
-  // al cargar el DOM
   document.addEventListener('DOMContentLoaded', startApp);
 
-  // al dar CLICK el Boton para mostrar la BARRA DE LIENZOS
-  btnDesignsbar.addEventListener('click', handlerBtnDesignsbarClick);
+  // al dar CLICK el Boton para mostrar la Barra de Diseños
+  btnMenuDesigns.addEventListener('click', openCloseDesignsbar);
+
+  // al dar CLICK la sección de Bienvenida
+  divWelcomeOptions.addEventListener("click", handlerClickWelcomeOptions);
   
   // al dar CLICK en un COLOR (Event Delegation)
-  colorPalette.addEventListener('click', handleClickColor);
-
+  divColorPalette.addEventListener('click', handlerClickColor);
 
   // al dar PRESIONAR el mouse sobre un BLOQUE del Lienzo (Event Delegation)
-  gridSection.addEventListener("mousedown", paintBlock);
-  // al APARECER encima de un BLOQUE del Lienzo (Event Delegation)
-  gridSection.addEventListener("mouseover", blockHover);
-  // al ARRASTRAR un BLOQUE del Lienzo
-  gridSection.addEventListener("dragstart", (e) => e.preventDefault());
+  sectionAppGrid.addEventListener("mousedown", ({ target }) => {
+    // 1 Valida si hay un elemento bloque ascendente
+    const block = target.closest('#AppGrid .AppGrid-block');
+    if (!block) return; // Si no lo hay sale de la funcion
 
+    paintBlock(block);
+  });
+  // al APARECER encima de un BLOQUE del Lienzo (Event Delegation)
+  sectionAppGrid.addEventListener("mouseover", ({ target }) => {
+    // 1 Valida si hay un elemento bloque ascendente
+    const block = target.closest('#AppGrid .AppGrid-block');
+    if (!block) return; // Si no lo hay sale de la funcion
+
+    blockHover(block, event.buttons);
+  });
+
+  // al ARRASTRAR un BLOQUE del Lienzo
+  sectionAppGrid.addEventListener("dragstart", (e) => e.preventDefault());
 
   // al PRESIONAR UNA TECLA en el documento
-  document.addEventListener("keydown", handleKeydownDocument);
+  document.addEventListener("keydown", handlerKeydownDocument);
 
   // al SOLTAR UNA TECLA en el documento
-  document.addEventListener("keyup", handleKeyupDocument);
+  document.addEventListener("keyup", handlerKeyupDocument);
   
-  // al CAMBIAR EL VALOR del color
-  inputColor.addEventListener('change', handlerChangeInputColor);
+  // al CAMBIAR EL VALOR del Input color
+  inputColorPicker.addEventListener('change', (evt) => createColor(evt.target.value) );
 
-  // al QUITAR EL FOCO del input de ancho y alto
-  inputWidth.addEventListener('focusout', handleFocusoutInputWith);
-  inputHeight.addEventListener('focusout', handleFocusoutInputHeight);
+  // // al QUITAR EL FOCO del input de ancho y alto
+  // inputGridWidth.addEventListener('focusout', handlerFocusoutInputWith);
+  // inputGridHeight.addEventListener('focusout', handlerFocusoutInputHeight);
 
-  // al CAMBIAR EL VALOR del check de los checkbox "Presionar" y "Borrar"
-  chbxPressed.addEventListener("change", (evt) => switchIsPressed(evt.target.checked));
-  chbxErasing.addEventListener("change", (evt) => switchIsErasing(evt.target.checked));
+  // Evento Change -> checkbox "Presionar Brocha" y "Presionar Borrador"
+  chbxPressedBrush.addEventListener("change", (evt) => switchIsBrushPressed(evt.target.checked));
+  chbxPressedErase.addEventListener("change", (evt) => switchIsEraserPressed(evt.target.checked));
 
   // al dar CLICK el Boton de REINICIAR LA GRILLA
-  btnEraseAll.addEventListener("click", resetGrid);
+  btnEraseGrid.addEventListener("click", resetGrid);
   
-  // al dar CLICK el Boton de HACER CAPTURA
-  btnCapture.addEventListener("click", getGridCapture);
+  // // al dar CLICK el Boton de HACER CAPTURA
+  // btnCaptureDesign.addEventListener("click", getGridCapture);
   
   // al dar CLICK el Boton GUARDAR
-  btnSave.addEventListener("click", handlerClickBtnSave);
+  btnSaveDesign.addEventListener("click", saveDesign);
 
-  // al PRESIONAR una tecla en el Input del NOMBRE de LIENZO
-  inputNameDesign.addEventListener('keydown', handleInputNameDesignKeydown);
+  // Evento Click -> Boton de Nuevo Diseño
+  btnNewDesign.addEventListener("click", () => showHideModalContainer(true) );
 
-  // al dar CLICK en el Boton "CONFIRMAR GUARDAR"
-  btnSaveConfirm.addEventListener('click', saveNewDesign);
+  // Evento Input -> Input del Modal - Ancho y Alto del Diseño
+  inputModalWidth.addEventListener("input", handlerInputNumber);
+  inputModalHeight.addEventListener("input", handlerInputNumber);
 
-  // al dar CLICK en el Boton de "Nuevo Lienzo"
-  designsList.addEventListener('click', handlerClickDesignsList);
+  // Evento Click -> Boton Generar Diseño personalizado
+  btnGenerateCustomDesign.addEventListener("click", function() {
+    // 1 tomamos los valores de los input
+    const width = inputModalWidth.value;
+    const height = inputModalHeight.value;
 
-  // al clickear el Boton de cerrar el panel de Captura
-  btnCloseCapture.addEventListener("click", closeModalContainer);
+    // 2 Si falta algún valor sale de la función
+    if ( width === "" || height === "") {
+      divErrorMessageModal.textContent = "Los campos no pueden estar vacíos";
+      return;
+    }
+    
+    if (width > 50 || height > 50) {
+      divErrorMessageModal.textContent = "Los lienzos sólo pueden tener un ancho y alto máximo de 50";
+      return;
+    }
+    divErrorMessageModal.textContent = ""; // Resetea el mensaje
+
+    // 4 Oculta el Modal y Bienvenida, muestra la Grilla
+    showHideWelcomeContainer(false);
+    showHideAppGrid(true);
+    
+    // 3 Genera la Grilla y crea el diseño
+    generateGrid(width, height);
+    createDesign({ width, height });
+
+    showHideModalContainer(false);
+  });
+
+  // Evento Click -> boton para cerrar al Container Modal
+  sectionModalContainer.addEventListener("click", function(evt) {
+    // 1 Busca el elemento de botón ancestro mas cercano
+    const btnCloseModal = evt.target.closest(".Modal-closeButton");
+
+    if (!btnCloseModal) return; // Si no existe sale de la función
+
+    // Ocultamos al Modal Container
+    showHideModalContainer(false);
+  });
+
+  // Evento click -> ContextMenu de Diseños
+  divDesignsList.addEventListener("click", function(evt) {
+
+    // 1 Busca el elemento de Menu de diseño y el elemento de diseño mas cercano
+    const menuElement = evt.target.closest(".DesignsList-designMenu");
+    const designElement = evt.target.closest(".DesignsList-design");
+    
+    if (menuElement) { // Click -> ContextMenu de Diseños
+
+      // 2 Muestra el ContextMenu y lo ubica en pantalla
+      showHideContextMenuDesigns(true, {y: evt.y, x: evt.x});
+      // 3 Le brinda el valor de la key del diseño que dió click
+      contextMenuDesigns.dataset.key = designElement.dataset.key;
+      contextMenuDesigns.focus(); // 4 Le da el foco
+
+    } else
+    if (designElement) { // Click -> Elemento del Diseño
+
+      // 2 Si este diseño ya está seleccionado sale de la función
+      if (designElement.classList.contains("is-selected")) return;
+      
+      // 4 Muestra el diseño en pantalla
+      const key = designElement.dataset.key;
+      sectionAppGrid.innerHTML = App.designs[key].html;
+      
+      // 3 Quita la clase de selección al diseño anterior y la aplica al actual
+      const oldSelected = divDesignsList.querySelector(".is-selected");
+      if (oldSelected) oldSelected.classList.remove("is-selected");
+      designElement.classList.add("is-selected");
+
+      // 5 Guarda la key del diseño actual seleccionado
+      App.selectedDesignKey = key;
+    }
+    
+  });
+
+  // Evento Blur -> ContextMenu de Diseños
+  contextMenuDesigns.addEventListener("blur", () => showHideContextMenuDesigns(false) );
+
+  // Evento Click -> Boton Renombrar Diseños
+  btnRenameDesign.addEventListener("click", function() {
+    // 1 Referencia al diseño actual
+    const key = contextMenuDesigns.dataset.key;
+    const currentDesign = divDesignsList.querySelector(`[data-key="${key}"]`);
+
+    // 2 Habilita la edición del nombre de diseño
+    const nameDesign = currentDesign.querySelector(".DesignsList-designName");
+    nameDesign.dataset.oldname = nameDesign.textContent;
+    nameDesign.setAttribute("contenteditable", "true");
+
+    // 3 Maneja el evento en línea blur para quitar la edición
+    nameDesign.onblur = () => nameDesign.setAttribute("contenteditable", "false");
+
+    // 4 Maneja el evento en línea keyDown
+    nameDesign.onkeydown = (evt) => {
+      
+      // 1 Si no presionó "enter" ni "escape" sale de la funcion
+      if (evt.keyCode !== 13 && evt.keyCode !== 27) return; // key "Enter" - "Escape"
+
+      // 2 Si presionó "Escape"
+      if (evt.keyCode === 27) { // key "Escape"
+
+        nameDesign.textContent = nameDesign.dataset.oldname; // Restaura el nombre anterior
+
+        // Deja el foco, deshabilita la edición y retira el attributo de nombre anterior
+        nameDesign.blur();
+        nameDesign.setAttribute("contenteditable", "false");
+        nameDesign.removeAttribute("data-oldname");
+        return;
+      }
+
+      // 3 Si presionó "Enter"
+
+      // Evita el salto de línea y cambia el nombre del Diseño
+      evt.preventDefault();
+      App.renameDesign(key, nameDesign.textContent);
+
+      // Deja el foco, deshabilita la edición y retira el attributo de nombre anterior
+      nameDesign.blur();
+      nameDesign.setAttribute("contenteditable", "false");
+      nameDesign.removeAttribute("data-oldname");
+    };
+
+    // 5 Oculta el Context Menu y da el foco al texto
+    showHideContextMenuDesigns(false);
+    nameDesign.focus();
+  });
 }
 //#endregion

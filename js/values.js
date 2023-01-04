@@ -1,55 +1,84 @@
 
-// 1. VALORES de CONFIGURACION de la APP
-const appSettings = {
-  width: 14,  // (Number) Ancho del lienzo
-  height: 14, //  (Number) Alto del lienzo
-  currentColor: null, // (String) Color seleccionado
-  isPressed: null, // (Bollean) Determina si se mantiene presionado el pincel
-  isErasing: null, // (Bollean) Determina si se mantiene presionado el borrador
-  designs: {}, // (Array) tendrá los elementos de lienzos guardados
-  currentDesign: null // Lienzo actual o seleccionado, tiene la KEY de la propiedad "designs"
+// 1. APP SETTING VALUES
+const App = {
+  selectedColor: null, // (String) Color seleccionado
+  isBrushPressed: null, // (Bollean) Determina si se mantiene presionado el pincel
+  isEraserPressed: null, // (Bollean) Determina si se mantiene presionado el borrador
+
+  designs: {}, // (Array) tendrá los HTML de lienzos guardados
+  selectedDesignKey: null, // Lienzo actual o seleccionado, tiene la KEY de la propiedad "designs"
+
+  // Añade un objeto con la estructura de diseño definida a la key designs
+  addDesign: (designObj) => App.designs[designObj.id] = designObj,
+  renameDesign: (designKey, designName) => App.designs[designKey].name = designName
 };
 
-// DOM Elements
+// Object Constructor para los Diseños
+function Design(id, name, width, height, html) {
+  this.id = id;
+  this.name = name;
+  this.width = width;
+  this.height = height;
+  this.html = html;
+}
 
-// Boton de la Barra de Diseños
-const btnDesignsbar = document.querySelector(".btn-designsbar");
-// Barra de Diseños
-const designsSection = document.querySelector(".my-designs");
-const designsList = document.querySelector(".my-designs .content");
-const divAnyDesigns = document.querySelector(".any-designs");
+// 2. DOM ELEMENTS
 
+// -> Header
+const btnMenuDesigns = document.querySelector("#MenuDesigns");
 
-// 2. LIENZO y PALETA de Colores
-const colorPalette = document.querySelector(".color-palette");
+// -> DesignsBar
+const sectionDesignsBar = document.querySelector("#DesignsBar");
+const divDesignsList = document.querySelector("#DesignsList");
+const divWithoutDesigns = document.querySelector("#WithoutDesigns");
+const btnNewDesign = document.querySelector("#NewDesign");
 
-const divColors = document.querySelectorAll(".color"); // Array de Bloques de color
+// -> ColorPalette
+const divColorPalette = document.querySelector("#ColorPalette");
+const divColors = document.querySelectorAll(".ColorPalette-color");
+const inputColorPicker = document.querySelector("#ColorPicker-input");
 
-const inputColor = document.querySelector('.color-palette input[type="color"]'); // Input del Color
-const gridSection = document.querySelector(".paint-grid"); // Grila pintable
+// -> AppGrid
+const sectionAppGrid = document.querySelector("#AppGrid");
 
+// -> WelcomeContainer
+const divWelcomeContainer = document.querySelector("#WelcomeContainer");
+const divWelcomeOptions = document.querySelector("#WelcomeContainer .WelcomeContainer-options");
 
-// 3. ELEMENTOS de las OPCIONES de la APP
-
+// -> Settings
+const sectionSettings = document.querySelector("#Settings");
 // Input del Ancho y del Alto del grid
-const inputWidth = document.querySelector('#width'); 
-const inputHeight = document.querySelector('#height');
-// Checkbox para mantener presionado el pincel
-const chbxPressed = document.querySelector("#pressed");
-// Checkbox para mantener presionado el borrador
-const chbxErasing = document.querySelector("#erase-cell");
-// Boton para borrar la Grilla
-const btnEraseAll = document.getElementById("erase-all");
-// Boton para guardar una imagen de la Grilla
-const btnSave = document.getElementById("save");
-// Boton para tomar una captura de la Grilla
-const btnCapture = document.getElementById("capture");
+const inputGridWidth = document.querySelector("#GridWidth"); 
+const inputGridHeight = document.querySelector("#GridHeight");
+// Checkbox - Presionar Pincel
+const chbxPressedBrush = document.querySelector("#PressedBrush");
+// Checkbox - Presionar Borrador
+const chbxPressedErase = document.querySelector("#PressedErase");
+// Boton - Borrar todos los cuadros de la Grilla
+const btnEraseGrid = document.querySelector("#EraseGrid");
+// Boton - Tomar Captura del Diseño
+const btnCaptureDesign = document.querySelector("#CaptureDesign");
+// Boton - Guardar Diseño
+const btnSaveDesign = document.querySelector("#SaveDesign");
 
 
+// -> ModalContainer
+const sectionModalContainer = document.querySelector("#ModalContainer");
 
-const modalContainer = document.querySelector(".modal-container");
-const modalCapture = document.querySelector(".capture-modal");
-const modalSaveName = document.querySelector(".save-name-modal");
+const inputModalWidth = document.querySelector("#ModalGridWidth");
+const inputModalHeight = document.querySelector("#ModalGridHeight");
+
+const btnGenerateCustomDesign = document.querySelector("#generateCustomDesign");
+
+const articleCaptureModal = document.querySelector("#CaptureModal");
+const articleSaveNameModal = document.querySelector("#SaveNameModal");
+
+const divErrorMessageModal = document.querySelector("#ModalErrorMessage");
+
+// -> DesignsContextMenu
+const contextMenuDesigns = document.querySelector("#DesignsContextMenu");
+
+const btnRenameDesign = document.querySelector("#RenameDesign");
 
 
 // 4. ELEMENTOS relacionados a la CAPTURA del LIENZO
