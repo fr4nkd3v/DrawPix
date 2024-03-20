@@ -1,9 +1,9 @@
+import { getColor, getId, isValidName, isValidNumber } from './utils.js';
 
 // #region PRINCIPAL FUNCTIONS
 
 // 1. Inicia la Aplicación
 function startApp() {
-  
   // 2 Establecemos el valor de los checkbox
   chbxPressedErase.checked = false;
   chbxPressedBrush.checked = false;
@@ -14,21 +14,30 @@ function startApp() {
 
   // 4 Lista los Lienzos guardados
   listDesigns();
+  calculateElementsWidth();
 }
 
-// . Abre/Cierra DesignsBar
-function openCloseDesignsbar() {
-  // toggle classes CSS
-  btnMenuDesigns.classList.toggle('is-active');
-  sectionDesignsBar.classList.toggle('is-closed');
+function calculateElementsWidth() {
+  const elements = document.querySelectorAll('.u-calcWidth');
+  elements.forEach(element => {
+    const widthValue = getComputedStyle(element).getPropertyValue('width')
+    element.style.setProperty('--width', widthValue);
+  })
+}
 
-  const isNotClosed = !sectionDesignsBar.classList.contains('is-closed'); // is open?
+// . Abre/Cierra CanvasBar
+function openCloseCanvasBar() {
+  // toggle classes CSS
+  btnMenu.classList.toggle('is-active');
+  sectionCanvasBar.classList.toggle('is-closed');
+
+  const isNotClosed = !sectionCanvasBar.classList.contains('is-closed'); // is open?
 
   // Change Texts
-  sectionDesignsBar.querySelector('.WithoutDesigns-note').innerHTML =
-    isNotClosed ? "Crea uno <span>Nuevo</span> aquí mismo :D" : "Crea uno<br/><span>Nuevo</span>";
-  sectionDesignsBar.querySelector('.WithoutDesigns-subtitle').innerHTML =
-    isNotClosed ? "<p> AUN NO TIENES</p><p>LIENZOS</p>" : "<p>SIN</p><p>LIENZOS</p>";
+  // sectionCanvasBar.querySelector('.WithoutDesigns-note').innerHTML =
+  //   isNotClosed ? "Crea uno <span>Nuevo</span> aquí mismo :D" : "Crea uno<br/><span>Nuevo</span>";
+  // sectionCanvasBar.querySelector('.WithoutDesigns-subtitle').innerHTML =
+  //   isNotClosed ? "<p> AUN NO TIENES</p><p>LIENZOS</p>" : "<p>SIN</p><p>LIENZOS</p>";
 }
 
 // . Muestra/Oculta Welcome Container
@@ -80,15 +89,15 @@ function enableDisableElement(element, bool) {
 }
 
 // . Muestra/Oculta el ContextMenu de Diseños
-function showHideContextMenuDesigns(bool, coords = { y: 0, x: 0 }) {
+function showHideContextMenu(bool, coords = { y: 0, x: 0 }) {
   if (bool) { // "Mostrar" y lo ubica en pantalla
-    contextMenuDesigns.classList.remove("is-hidden");
-    contextMenuDesigns.style.top = `${coords.y}px`;
-    contextMenuDesigns.style.left = `${coords.x}px`;
+    contextMenu.classList.remove("is-hidden");
+    contextMenu.style.top = `${coords.y}px`;
+    contextMenu.style.left = `${coords.x}px`;
   } else { // "Ocultar"
-    contextMenuDesigns.classList.add("is-hidden");
-    contextMenuDesigns.style.top = "0px";
-    contextMenuDesigns.style.left = "0px";
+    contextMenu.classList.add("is-hidden");
+    contextMenu.style.top = "0px";
+    contextMenu.style.left = "0px";
   }
 }
 
@@ -511,7 +520,7 @@ function eventListeners() {
   document.addEventListener('DOMContentLoaded', startApp);
 
   // al dar CLICK el Boton para mostrar la Barra de Diseños
-  btnMenuDesigns.addEventListener('click', openCloseDesignsbar);
+  btnMenu.addEventListener('click', openCloseCanvasBar);
 
   // al dar CLICK la sección de Bienvenida
   divWelcomeOptions.addEventListener("click", handlerClickWelcomeOptions);
@@ -622,10 +631,10 @@ function eventListeners() {
     if (menuElement) { // Click -> ContextMenu de Diseños
 
       // 2 Muestra el ContextMenu y lo ubica en pantalla
-      showHideContextMenuDesigns(true, {y: evt.y, x: evt.x});
+      showHideContextMenu(true, {y: evt.y, x: evt.x});
       // 3 Le brinda el valor de la key del diseño que dió click
-      contextMenuDesigns.dataset.key = designElement.dataset.key;
-      contextMenuDesigns.focus(); // 4 Le da el foco
+      contextMenu.dataset.key = designElement.dataset.key;
+      contextMenu.focus(); // 4 Le da el foco
 
     } else
     if (designElement) { // Click -> Elemento del Diseño
@@ -649,12 +658,12 @@ function eventListeners() {
   });
 
   // Evento Blur -> ContextMenu de Diseños
-  contextMenuDesigns.addEventListener("blur", () => showHideContextMenuDesigns(false) );
+  contextMenu.addEventListener("blur", () => showHideContextMenu(false) );
 
   // Evento Click -> Boton Renombrar Diseños
   btnRenameDesign.addEventListener("click", function() {
     // 1 Referencia al diseño actual
-    const key = contextMenuDesigns.dataset.key;
+    const key = contextMenu.dataset.key;
     const currentDesign = divDesignsList.querySelector(`[data-key="${key}"]`);
 
     // 2 Habilita la edición del nombre de diseño
@@ -696,7 +705,7 @@ function eventListeners() {
     };
 
     // 5 Oculta el Context Menu y da el foco al texto
-    showHideContextMenuDesigns(false);
+    showHideContextMenu(false);
     nameDesign.focus();
   });
 }

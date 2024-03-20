@@ -6,7 +6,7 @@
 // A (String) Devuelve el background-color de un elemento
 //   Recibe un elemento del DOM
 //   Retorna un String que representa un Color
-const getColor = element => {
+export const getColor = element => {
   let color = window.getComputedStyle(element, null)
     .getPropertyValue("background-color");
   return color;
@@ -15,13 +15,13 @@ const getColor = element => {
 // B (Boolean) Valida si un dato ingresado es un número
 //   Recibe un número (o debería)
 //   Retorna true o false
-const isValidNumber = value => Number.isInteger(value);
+export const isValidNumber = value => Number.isInteger(value);
 
 // C (Boolean) Verifica si un nombre es válido
 //   Recibe un String
 //   Retorna true o false
-const isValidName = str => (str.trim().length > 0);
+export const isValidName = str => (str.trim().length > 0);
 
 // D (String)
 // Retorna un timestamp en formato string a modo de ID +unico
-const getId = () => new Date().getTime().toString();
+export const getId = () => new Date().getTime().toString();

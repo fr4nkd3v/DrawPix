@@ -25,10 +25,10 @@ function Design(id, name, width, height, html) {
 // 2. DOM ELEMENTS
 
 // -> Header
-const btnMenuDesigns = document.querySelector("#MenuDesigns");
+const btnMenu = document.querySelector("#Menu");
 
-// -> DesignsBar
-const sectionDesignsBar = document.querySelector("#DesignsBar");
+// -> CanvasBar
+const sectionCanvasBar = document.querySelector("#CanvasBar");
 const divDesignsList = document.querySelector("#DesignsList");
 const divWithoutDesigns = document.querySelector("#WithoutDesigns");
 const btnNewDesign = document.querySelector("#NewDesign");
@@ -43,7 +43,7 @@ const sectionAppGrid = document.querySelector("#AppGrid");
 
 // -> WelcomeContainer
 const divWelcomeContainer = document.querySelector("#WelcomeContainer");
-const divWelcomeOptions = document.querySelector("#WelcomeContainer .WelcomeContainer-options");
+const divWelcomeOptions = document.querySelector("#WelcomeContainer .WelcomeContainer-body");
 
 // -> Settings
 const sectionSettings = document.querySelector("#Settings");
@@ -76,7 +76,7 @@ const articleSaveNameModal = document.querySelector("#SaveNameModal");
 const divErrorMessageModal = document.querySelector("#ModalErrorMessage");
 
 // -> DesignsContextMenu
-const contextMenuDesigns = document.querySelector("#DesignsContextMenu");
+const contextMenu = document.querySelector("#DesignsContextMenu");
 
 const btnRenameDesign = document.querySelector("#RenameDesign");
 

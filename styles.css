@@ -1,21 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap');
-
 /* #region Variables */
 
 :root {
+  /* Colors */
   --primary-color: #FF8F2C;
   --primary-80-color: #FF8F2CDD;
   --secondary-color: #EB5757;
   --light-color: #F5F5F5;
-  --primary-gradient: linear-gradient(0deg, #FFB628, #FF8F28);
-  --primary-gradient-50deg: linear-gradient(50deg, #FFB628, #FF8F28);
-  --secondary-gradient: linear-gradient(0deg, #FF6745, #FFB23E);
-  --light-gradient: linear-gradient(0deg, rgba(0 0 0 / 0), rgba(0 0 0 / .4)),
-    linear-gradient(0deg, #FFB628, #FF8F28);
-  --grid-gradient: linear-gradient(0deg, #2A2A2A 10%, rgba(255, 255, 255, 0) 10%),
-    linear-gradient(90deg, #2A2A2A 10%, rgba(255, 255, 255, 0) 10%),
-    var(--gray-2-color);
 
+  /* Gradients */
+  --primary-gradient: linear-gradient(
+    0deg,
+    #FFB628,
+    #FF8F28
+  );
+  --primary-gradient-50deg: linear-gradient(
+    50deg,
+    #FFB628,
+    #FF8F28
+  );
+  --secondary-gradient: linear-gradient(
+    0deg,
+    #FF6745,
+    #FFB23E
+  );
+  --light-gradient: linear-gradient(
+    0deg,
+    rgba(0 0 0 / 0),
+    rgba(0 0 0 / .4)
+  ), linear-gradient(
+    0deg,
+    #FFB628,
+    #FF8F28
+  );
+  --grid-gradient: linear-gradient(
+    0deg,
+    #2A2A2A 10%,
+    rgba(255, 255, 255, 0) 10%
+  ), linear-gradient(
+    90deg,
+    #2A2A2A 10%,
+    rgba(255, 255, 255, 0) 10%
+  ), var(--gray-2-color);
+
+    /* Gary scale */
   --gray-05-color: #111111;
   --gray-1-color: #191919;
   --gray-1-5-color: #262626;
@@ -27,6 +54,10 @@
   --gray-7-color: #B3B3B3;
   --gray-8-color: #CCCCCC;
   --gray-9-color: #E6E6E6;
+
+  /* Font */
+
+  --font-default: "Nunito Sans", sans-serif;
 }
 
 /* #endregion Variables */
@@ -51,13 +82,6 @@
 
 /* #endregion Colors */
 
-@font-face {
-  font-family: 'Squarely';
-  src: url('./assets/Squarely.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 400;
-}
-
 /* #region RESET */
 
 * {
@@ -72,12 +96,12 @@
 input {
   outline: none;
   border-style: solid;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-default);
   width: 100%;
 }
 
 button {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-default);
   border-style: solid;
   background-color: transparent;
   cursor: pointer;
@@ -85,16 +109,18 @@ button {
 
 body {
   height: 100vh;
-  display: grid;
-  grid-template-areas:
-    "header header header header"
-    "designsBar containerGrid palette settingsBar";
-  grid-template-columns: auto 1fr auto 12rem;
-  grid-template-rows: 7rem auto;
-  
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-default);
   color: #444;
   background-color: var(--gray-2-color);
+}
+body > .container {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "CanvasBar containerGrid settingsBar";
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 7rem auto;
+  width: 100%; height: 100%;
 }
 
 /* #endregion GENERAL STYLES */
@@ -107,31 +133,36 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   background: var(--grid-gradient);
   background-size: 22px 22px;
   border-bottom: 1px solid var(--gray-3-color);
 }
 
-.Header-title {
-  margin-top: -.7rem;
-  
-  font-family: 'Squarely';
-  font-size: 3.5rem;
-  background: var(--secondary-gradient);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.Brand {
+  display: flex;
+  gap: .8rem;
+  align-items: center;
+}
+.Brand-isotype {
+  width: 2.3rem;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+.Brand-logotype {
+  height: 1.8rem;
+  aspect-ratio: 45 / 8;
+  object-fit: contain;
 }
 
-/* #region MenuDesigns */
+/* #region Menu */
 
-.MenuDesigns {
+.Menu {
   position: absolute;
   top: calc(50% - 1.8rem); left: 2rem;
 
   padding: .6rem;
-  width: 4rem; height: 3.6rem;
+  width: 3.6rem; height: 3.3rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -140,85 +171,73 @@ body {
   cursor: pointer;
   overflow: hidden;
 }
-.MenuDesigns-line {
+.Menu-line {
   position: relative;
-  width: 25%; height: 6px;
+  width: 25%; height: 5px;
   background-color: var(--secondary-color);
   border-radius: .5rem;
   transition: width .3s;
 }
-.MenuDesigns-line:nth-child(2) { width: 50%; }
+.Menu-line:nth-child(2) { width: 50%; }
 
-.MenuDesigns:hover { background-color: rgba(0 0 0 / .2); }
+.Menu:hover { background-color: rgba(0 0 0 / .2); }
 
 /* State .is-active */
-.MenuDesigns.is-active .MenuDesigns-line:nth-child(1) { width: 100%; }
-.MenuDesigns.is-active .MenuDesigns-line:nth-child(2) { width: 75%; }
-.MenuDesigns.is-active .MenuDesigns-line:nth-child(3) { width: 50%; }
+.Menu.is-active .Menu-line:nth-child(1) { width: 100%; }
+.Menu.is-active .Menu-line:nth-child(2) { width: 75%; }
+.Menu.is-active .Menu-line:nth-child(3) { width: 50%; }
 
-/* #endregion MenuDesigns */
+/* #endregion Menu */
 
 /* #endregion Header */
 
-/* #region DesignsBar */
+/* #region CanvasBar */
 
-.DesignsBar {
-  grid-area: designsBar;
-  box-sizing: content-box;
-  width: 20rem;
-  background-color: var(--gray-2-color);
+.CanvasBar {
+  grid-area: CanvasBar;
+  width: 18rem;
   padding: 1.6rem 0;
-  
+
   display: flex; gap: 2rem;
   flex-direction: column;
   align-items: center;
-  
+
+  background-color: var(--gray-2-color);
   border-right: 1px solid var(--gray-3-color);
   color: var(--light-color);
   overflow: hidden;
   transition: width .4s, border-right-width .4s;
 }
-.DesignsBar.is-closed { width: 7rem; }
+.CanvasBar.is-closed { width: 7rem; }
 
-
-.DesignsBar-title {
-  font-family: 'Squarely';
+.CanvasBar-title {
   display: flex; gap: .5rem;
   align-items: center;
   font-size: 2rem;
+  font-weight: 900;
   transition: gap .4s;
+  color: var(--gray-8-color);
 }
-.DesignsBar.is-closed .DesignsBar-title {
-  gap: 0;
-}
+.CanvasBar.is-closed .CanvasBar-title { gap: 0; }
 
-.DesignsBar-titleTextWrapper {
-  display: block;
-  width: 137px;
+.CanvasBar-titleText {
+  width: var(--width, 100%);
   overflow: hidden;
   transition: width .4s;
 }
-.DesignsBar.is-closed .DesignsBar-titleTextWrapper {
+.CanvasBar.is-closed .CanvasBar-titleText {
   width: 0px;
 }
 
-.DesignsBar-titleText {
-  width: max-content;
+.CanvasBar-icon {
+  width: 1.87rem;
+  aspect-ratio: 30 / 40;
+  fill: var(--gray-8-color);
 }
 
-
-.DesignsBar-icon {
-  width: 1.8rem; height: 1.8rem;
-  fill: var(--light-color);
-  transition: width .4s, height .4s;
-}
-.DesignsBar.is-closed .DesignsBar-icon {
-  width: 2.8rem; height: 2.8rem;
-}
-
-.DesignsBar-body {
+.CanvasBar-body {
   width: 100%;
-  display: flex;
+  display: flex; gap: 3rem;
   flex-direction: column;
   align-items: center;
   padding: 0 1.5rem;
@@ -239,7 +258,7 @@ body {
   display: flex; gap: .5rem;
   align-items: center;
   padding: .8rem 1.5rem;
-  
+
   /* font-family: 'nirmala ui', Calibri, 'Trebuchet MS', sans-serif; */
   font-size: 1.1rem;
   border-radius: .5rem;
@@ -250,7 +269,7 @@ body {
 }
 .DesignsList-design:hover { background-color: var(--gray-1-5-color); }
 
-.DesignsBar.is-closed .DesignsList-design {
+.CanvasBar.is-closed .DesignsList-design {
   gap: 1rem;
   padding: .8rem;
   justify-content: center;
@@ -261,7 +280,7 @@ body {
   width: 2rem; height: 2rem;
   fill: var(--gray-9-color);
 }
-.DesignsBar.is-closed .DesignsList-designIcon {
+.CanvasBar.is-closed .DesignsList-designIcon {
   width: 1.7rem; height: 1.7rem;
 }
 
@@ -278,7 +297,7 @@ body {
   outline: var(--gray-9-color) solid 1px;
   caret-color: white;
 }
-.DesignsBar.is-closed .DesignsList-designName { display: none; }
+.CanvasBar.is-closed .DesignsList-designName { display: none; }
 
 .DesignsList-designMenu {
   height: 100%;
@@ -292,7 +311,7 @@ body {
 .DesignsList-designMenu:hover {
   background-color: var(--gray-3-color);
 }
-.DesignsBar.is-closed .DesignsList-designMenu { display: none; }
+.CanvasBar.is-closed .DesignsList-designMenu { display: none; }
 
 .DesignsList-designMenu div {
   width: 6px; height: 6px;
@@ -308,7 +327,7 @@ body {
   border: 1px solid var(--gray-5-color);
   background-color: white;
 }
-.DesignsBar.is-closed .DesignsList-designIndicator {
+.CanvasBar.is-closed .DesignsList-designIndicator {
   position: absolute;
   right: 1.5rem;
 }
@@ -317,14 +336,14 @@ body {
 .DesignsList-design.is-selected {
   width: calc(100% + 1.5rem);
   padding: .8rem 1.5rem;
-  
+
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   background-image: var(--primary-gradient-50deg);
   color: var(--gray-2-color);
   border-color: transparent;
 }
-.DesignsBar.is-closed .DesignsList-design.is-selected {
+.CanvasBar.is-closed .DesignsList-design.is-selected {
   padding-left: .5rem;
   padding-right: calc(1.5rem + .5rem);
 }
@@ -370,39 +389,30 @@ body {
   display: flex; gap: .8rem;
   flex-direction: column;
   align-items: center;
-  
-  font-size: 1.8rem;
-  color: var(--light-color);
+
+  color: var(--gray-8-color);
   text-align: center;
 }
 .WithoutDesigns-icon {
-  width: 6rem; height: 6rem;
-  fill: var(--light-color);
+  width: 6.25rem;
+  aspect-ratio: 1 / 1;
+  fill: var(--gray-8-color);
 }
-.DesignsBar.is-closed .WithoutDesigns-icon {
-  width: 3.5rem; height: 3.5rem;
+.CanvasBar.is-closed .WithoutDesigns-icon {
+  width: 3.75rem;
 }
 
-.WithoutDesigns-subtitle {
-  font-family: 'Squarely';
-  font-size: 2rem;
-  line-height: 2rem;
-}
-.DesignsBar.is-closed .WithoutDesigns-subtitle {
+.WithoutDesigns-subtitle::before {
+  content: 'You still have no Canvases';
   font-size: 1.5rem;
-  line-height: 1.5rem;
-}
-
-.WithoutDesigns-note {
-  margin-top: 4rem;
-  font-size: .9rem;
-  font-weight: 300;
-  color: var(--gray-9-color);
-}
-
-.WithoutDesigns-note span {
   font-weight: 700;
-  color: var(--light-color);
+  line-height: 2rem;
+  transition: font-size .4s;
+}
+.CanvasBar.is-closed .WithoutDesigns-subtitle::before {
+  content: 'No Canvases';
+  font-size: 1rem;
+  line-height: 100%;
 }
 
 /* #endregion WithoutDesigns */
@@ -414,7 +424,7 @@ body {
   display: flex; gap: .3rem;
   justify-content: center;
   align-items: center;
-  
+
   border: 1px solid var(--light-color);
   border-radius: .3rem;
   color: var(--light-color);
@@ -430,6 +440,13 @@ body {
 
 /* #region Button--newDesign */
 
+.NewDesignButtonGroup {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .Button--newDesign {
   width: 100%;
   gap: .3rem;
@@ -444,7 +461,19 @@ body {
 }
 .Button--newDesign:hover { background-color: var(--gray-05-color); }
 
-.DesignsBar.is-closed .Button--newDesign {
+.NewDesignButtonGroup-label::before {
+  content: 'Create a New one';
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  transition: font-size .4s;
+}
+.CanvasBar.is-closed .NewDesignButtonGroup-label::before {
+  content: 'Create New';
+  font-size: .87rem;
+}
+
+.CanvasBar.is-closed .Button--newDesign {
   width: fit-content;
   margin-top: 1rem;
 }
@@ -457,13 +486,13 @@ body {
   display: block;
   transition: width .4s;
 }
-.DesignsBar.is-closed .Button--newDesign .Button-text {
+.CanvasBar.is-closed .Button--newDesign .Button-text {
   display: none;
 }
 
 /* #endregion Button--newDesign */
 
-/* #endregion DesignsBar */
+/* #endregion CanvasBar */
 
 /* #region AppGrid */
 
@@ -528,77 +557,71 @@ body {
   color: var(--gray-9-color);
 }
 
-.WelcomeContainer-top {
+/* .WelcomeContainer-header {
   width: fit-content;
-}
+} */
 
-.WelcomeContainer-topTitle {
-  display: flex;
-  gap: .5rem;
+.WelcomeContainer-titleGroup {
+  display: flex; gap: 1rem;
   align-items: center;
   justify-content: center;
   margin: 1.4rem 0;
 }
 
-.WelcomeContainer-topTitleText {
-  font-family: 'Squarely';
-  font-size: 2.8rem;
+.WelcomeContainer-title {
+  font-size: 3.25rem;
+  font-weight: 900;
   color: var(--primary-color);
 }
 
-.WelcomeContainer-topTitleIcon {
-  width: 3rem;
-  height: 3rem;
+.WelcomeContainer-icon {
+  width: 4.37rem;
+  aspect-ratio: 1 / 1;
   fill: var(--primary-color);
 }
 
-.WelcomeContainer-topSubtitle {
-  font-size: .9rem;
+.WelcomeContainer-headerSubtitle {
+  font-size: 1.25rem;
   font-weight: 300;
 }
 
-.WelcomeContainer-topSubtitle span {
-  font-weight: 700;
-}
+.WelcomeContainer-subtitleBold { font-weight: 700; }
 
-.WelcomeContainer-options {
-  display: grid;
-  gap: 3rem;
-  grid-template-columns: repeat(4, 8rem);
-  grid-auto-rows: 8rem;
+.WelcomeContainer-body {
+  display: grid; gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
   margin: 3rem 0;
 }
 
 .WelcomeContainer-template {
+  width: 9rem;
+  aspect-ratio: 1 / 1;
   display: grid;
   gap: .5rem;
   place-content: center;
   place-items: center;
 
-  border: 1px solid var(--gray-7-color);
+  border: 2px solid var(--gray-9-color);
   border-radius: .5rem;
-
   cursor: pointer;
   transition: background-color .2s, border-color .2s;
 }
-
 .WelcomeContainer-template:hover {
-  background-color: var(--primary-80-color);
+  background-color: var(--primary-color);
   color: var(--gray-2-color);
   border-color: var(--primary-color);
 }
 
-
 .WelcomeContainer-templateText {
-  font-family: 'Squarely';
-  font-size: 2rem;
+  font-size: 1.4rem;
+  font-weight: 900;
   line-height: 1.2rem;
   transition: color .2s;
 }
 
 .WelcomeContainer-templateIcon {
-  width: 3rem;
-  height: 3rem;
+  width: 4.6rem;
+  aspect-ratio: 1 / 1;
   fill: var(--gray-9-color);
   transition: fill .2s;
 }
@@ -609,10 +632,18 @@ body {
 
 /* #endregion */
 
+/* #region SettingsBar */
+
+.SettingsBar {
+  display: flex;
+  grid-area: settingsBar;
+}
+
+/* #endregion SettingsBar */
+
 /* #region ColorPalette */
 
 .ColorPalette {
-  grid-area: palette;
   position: relative;
   display: grid;
   grid-auto-columns: 3.5rem;
@@ -626,7 +657,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   cursor: pointer;
 }
 
@@ -656,7 +687,7 @@ body {
   position: relative;
   width: 3.5rem; height: 3.5rem;
   overflow: hidden;
-  
+
   background-color: #FFF;
   cursor: pointer;
 }
@@ -694,7 +725,6 @@ body {
 /* #region Settings */
 
 .Settings {
-  grid-area: settingsBar;
   width: 12rem;
   display: flex; flex-direction: column;
   background-color: var(--gray-2-color);
@@ -707,7 +737,7 @@ body {
 .SettingOption {
   display: flex; gap: .5rem;
   flex-direction: column;
-  
+
   margin: 0;
   padding: 1rem;
   border-bottom: 1px solid var(--gray-3-color);
@@ -718,8 +748,8 @@ body {
   align-items: center;
 
   color: var(--light-color);
-  font-family: 'Squarely', sans-serif;
-  font-size: 1.7rem;
+  font-size: 1.125rem;
+  font-weight: 600;
 }
 .SettingOption-titleIcon {
   width: 1.5rem; height: 1.5rem;
@@ -770,23 +800,28 @@ body {
 /* #region SwitchButton */
 
 .SwitchButton {
-  display: flex; gap: .2rem;
+  display: flex; gap: .6rem;
   justify-content: center;
   align-items: center;
   position: relative;
 }
 .SwitchButton-input { display: none; }
 
-.SwitchButton-indicator {
-  width: 1.1rem; height: 1.1rem;
-  fill: var(--gray-4-color);
+.SwitchButton-command {
+  padding: .1rem .5rem;
+  color: var(--gray-6-color);
+  font-size: 1.125rem;
+  font-weight: 400;
+  background-color: var(--gray-3-color);
+  border: 1px solid var(--gray-6-color);
+  border-radius: 3px;
 }
 .SwitchButton-border {
   display: flex;
   align-items: center;
   width: 60px; height: 26px;
   padding: 0 1px;
-  
+
   border: solid 2px var(--gray-8-color);
   border-radius: 13px;
   cursor: pointer;
@@ -796,14 +831,13 @@ body {
   position: relative;
   width: 20px; height: 20px;
   left: 0;
-  
+
   border-radius: 10px;
   background-color: var(--gray-8-color);
 
   transition: left .2s;
 }
 
-.SwitchButton:hover .SwitchButton-indicator { fill: var(--gray-5-color); }
 .SwitchButton:hover .SwitchButton-border { border-color: var(--light-color); }
 .SwitchButton:hover .SwitchButton-circle { background-color: var(--light-color); }
 
@@ -813,8 +847,11 @@ body {
 .SwitchButton-input:checked + .SwitchButton-label .SwitchButton-circle {
   background-color: var(--secondary-color); left: calc(100% - 20px);
 }
-.SwitchButton-input:checked ~ .SwitchButton-indicator {
-  fill: var(--secondary-color);
+.SwitchButton-input:checked ~ .SwitchButton-command {
+  color: var(--gray-2-color);
+  font-weight: 500;
+  background-color: var(--gray-8-color);
+  border: 1px solid var(--gray-8-color);
 }
 
 /* #endregion SwitchButton */
@@ -922,7 +959,7 @@ body {
   margin-top: 2rem;
 }
 .Modal-input {
-  
+
 }
 .Modal-input:focus + .Modal-inputLabel,
 .Modal-input:valid + .Modal-inputLabel {
@@ -949,7 +986,7 @@ body {
   content: "i";
   display: inline-block;
   width: 1.3rem; height: 1.3rem;
-  
+
   border: 2px solid #f43333;
   border-radius: 50%;
   text-align: center;
@@ -1075,7 +1112,7 @@ body {
   align-items: center;
   width: fit-content;
   padding: .5rem 1rem;
-  
+
   font-family: inherit;
   font-size: 1.4rem;
   color: #fff;
@@ -1117,7 +1154,7 @@ body {
   display: flex; gap: .5rem;
   align-items: center;
   padding: 5px;
-  
+
   border-radius: 3px;
   cursor: pointer;
 }
