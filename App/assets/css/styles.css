@@ -904,8 +904,9 @@ input.Input:-internal-autofill-selected {
   display: flex;
   /* justify-content: center; */
   align-items: center;
-  /* width: 100%; height: 100%;
-  padding: 2rem; */
+  width: 100%;
+  height: 100%;
+  /* padding: 2rem; */
 }
 .container-CanvasEditor.no-canvas .CanvasEditor {
   display: none;
