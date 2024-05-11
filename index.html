@@ -7,319 +7,369 @@
 
     <script src="https://kit.fontawesome.com/4872505e1c.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./App/assets/css/styles.css" />
 
     <title>DrawPix</title>
   </head>
 
   <body>
 
-    <header class="Header">
+    <div class="container">
 
-      <div class="MenuDesigns is-active" id="MenuDesigns">
-        <div class="MenuDesigns-line"></div>
-        <div class="MenuDesigns-line"></div>
-        <div class="MenuDesigns-line"></div>
-      </div>
+      <header class="Header">
 
-      <h1 class="Header-title">DRAWPIX</h1>
-    </header>
-
-    <section class="DesignsBar" id="DesignsBar">
-      
-      <div class="DesignsBar-title">
-        <svg class="DesignsBar-icon">
-          <use xlink:href="./assets/document-icon.svg#icon"></use>
-        </svg>
-        <div class="DesignsBar-titleTextWrapper">
-          <p class="DesignsBar-titleText">MIS LIENZOS</p>
+        <div class="Menu" id="Menu">
+          <div class="Menu-line"></div>
+          <div class="Menu-line"></div>
+          <div class="Menu-line"></div>
         </div>
-      </div>
 
-      <div class="DesignsBar-body">
-        
-        <div class="WithoutDesigns" id="WithoutDesigns">
+        <div class="Brand">
+          <img class="Brand-isotype" src="./App/assets/logos/drawpix-isotype.svg" alt="Drawpix icon">
+          <img class="Brand-logotype" src="./App/assets/logos/drawpix-logotype.svg" alt="Drawpix logotype">
+        </div>
+      </header>
 
-          <svg class="WithoutDesigns-icon">
-            <use xlink:href="./assets/face-sweat-icon.svg#icon"></use>
+      <section class="CanvasBar" id="CanvasBar">
+
+        <div class="CanvasBar-title">
+          <svg class="CanvasBar-icon">
+            <use xlink:href="./App/assets/icons/drawpix-file-icon.svg#icon"></use>
           </svg>
-          <div class="WithoutDesigns-subtitle">
-            <p>AUN NO TIENES</p>
-            <p>LIENZOS</p>
-          </div>
-          <p class="WithoutDesigns-note">Crea uno <span>Nuevo</span> aquí mismo :D</p>
-        
-        </div>
-                
-        <div class="DesignsList" id="DesignsList">
-          <!-- <div class="DesignsList-design is-selected">
-            <svg class="DesignsList-designIcon">
-              <use xlink:href="./assets/design-icon.svg#icon" />
-            </svg>
-            <div class="DesignsList-designIndicator"></div>
-            <span class="DesignsList-designName">Pixel Art 1</span>
-            <div class="DesignsList-designMenu">
-              <div></div><div></div><div></div>
-            </div>
-          </div> -->
-        </div>
-  
-        <button class="Button Button--newDesign" id="NewDesign">
-          <svg class="Button-icon">
-            <use xlink:href="./assets/add-icon.svg#icon"></use>
-          </svg>
-          <span class="Button-text">Nuevo</span>
-        </button>
-        
-      </div>
-
-    </section>
-    
-    <main class="container-AppGrid">
-
-      <section class="AppGrid" id="AppGrid"></section>
-
-      <section class="WelcomeContainer" id="WelcomeContainer">
-
-        <div class="WelcomeContainer-top">
-          <div class="WelcomeContainer-topTitle">
-            <span class="WelcomeContainer-topTitleText">BIENVENIDO</span>
-            <svg class="WelcomeContainer-topTitleIcon">
-              <use xlink:href="./assets/hand-welcome-icon.svg#icon" />
-            </svg>
-          </div>
-          <p class="WelcomeContainer-topSubtitle">
-            Selecciona un <span>Proyecto existente</span> o <span>Crea uno nuevo</span> usando una de estas plantillas:
-          </p>
+          <p class="CanvasBar-titleText u-calcWidth">Canvases</p>
         </div>
 
-        <div class="WelcomeContainer-options">
-          <div class="WelcomeContainer-template" data-width="10" data-height="10">
-            <span class="WelcomeContainer-templateText">10 X 10</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
+        <div class="CanvasBar-body">
+
+          <div class="WithoutCanvasPanel" id="WithoutCanvasPanel">
+            <svg class="WithoutCanvasPanel-icon">
+              <use xlink:href="./App/assets/icons/face-sweat-icon.svg#icon"></use>
             </svg>
+            <div class="WithoutCanvasPanel-subtitle"></div>
           </div>
-          <div class="WelcomeContainer-template" data-width="20" data-height="20">
-            <span class="WelcomeContainer-templateText">20 X 20</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
+
+          <div class="CanvasBar-list" id="CanvasBar-list"></div>
+
+          <hr class="CanvasBar-separator" id="CanvasBar-separator"/>
+
+          <button class="Button Button--dashed NewCanvasButton" id="NewCanvasButton">
+            <svg class="Button-icon">
+              <use xlink:href="./App/assets/icons/add-icon.svg#icon"></use>
             </svg>
-          </div>
-          <div class="WelcomeContainer-template" data-width="40" data-height="40">
-            <span class="WelcomeContainer-templateText">40 X 40</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
-            </svg>
-          </div>
-          <div class="WelcomeContainer-template" data-width="50" data-height="50">
-            <span class="WelcomeContainer-templateText">50 X 50</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
-            </svg>
-          </div>
-          <div class="WelcomeContainer-template" data-width="10" data-height="15">
-            <span class="WelcomeContainer-templateText">10 X 15</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
-            </svg>
-          </div>
-          <div class="WelcomeContainer-template" data-width="20" data-height="25">
-            <span class="WelcomeContainer-templateText">20 X 25</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
-            </svg>
-          </div>
-          <div class="WelcomeContainer-template" data-width="30" data-height="35">
-            <span class="WelcomeContainer-templateText">30 X 35</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
-            </svg>
-          </div>
-          <div class="WelcomeContainer-template" data-width="" data-height="" id="CustomTemplate">
-            <span class="WelcomeContainer-templateText">PROPIO</span>
-            <svg class="WelcomeContainer-templateIcon">
-              <use xlink:href="./assets/grid-icon.svg#icon"></use>
-            </svg>
-          </div>
+            <span class="Button-text">New canvas</span>
+          </button>
+
         </div>
 
       </section>
 
-    </main>
-    
-    <div class="ColorPalette" id="ColorPalette">
-    
-      <div class="ColorPalette-color u-black">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-white">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-red">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-orange">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-yellow">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-lime">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-green">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-green-tur">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-turquoise">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-blue">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-marine-blue">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-brown">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      <div class="ColorPalette-color u-cherry">
-        <svg class="ColorPalette-icon"><use xlink:href="./assets/check-icon.svg#icon"></use></svg>
-      </div>
-      
-      <label class="ColorPicker" for="ColorPicker-input">
-        <div class="ColorPicker-back"></div>
-        <input type="color" class="ColorPicker-input" name="ColorPicker-input" id="ColorPicker-input">
-        <svg class="ColorPicker-icon">
-          <use xlink:href="./assets/color-palette-icon.svg#icon" />
-        </svg>
-      </label>
+      <main class="container-CanvasEditor" id="container-CanvasEditor">
+
+        <section class="CanvasEditor is-brushPressed" id="CanvasEditor"></section>
+
+        <section class="WelcomeContainer" id="WelcomePanel">
+
+          <div class="WelcomeContainer-modalCloseButton" id="WelcomeContainer-modalCloseButton">
+            <svg class="WelcomeContainer-modalCloseButtonIcon">
+              <use xlink:href="./App/assets/icons/close-icon.svg#icon" />
+            </svg>
+          </div>
+          <div class="WelcomeContainer-modalHeader">
+            <h1 class="WelcomeContainer-modalHeaderTitle">New Canvas</h1>
+            <p class="WelcomeContainer-subtitle">
+              Select an <span class="WelcomeContainer-subtitleBold">Existing Project</span> or <span class="WelcomeContainer-subtitleBold">Create a new one</span>
+            </p>
+          </div>
+
+          <div class="WelcomeContainer-header">
+            <div class="WelcomeContainer-titleGroup">
+              <span class="WelcomeContainer-title">Welcome!</span>
+              <svg class="WelcomeContainer-icon">
+                <use xlink:href="./App/assets/icons/face-laugh-icon.svg#icon" />
+              </svg>
+            </div>
+            <p class="WelcomeContainer-subtitle">
+              Select an <span class="WelcomeContainer-subtitleBold">Existing Project</span> or <span class="WelcomeContainer-subtitleBold">Create a new one</span>
+            </p>
+          </div>
+
+          <div class="WelcomeContainer-body">
+
+            <section class="WelcomeContainer-section">
+              <h1 class="WelcomeContainer-sectionTitle">Templates <span class="WelcomeContainer-sectionSubtitle">(Width x Height)</span></h1>
+              <div class="WelcomeContainer-sectionBody">
+
+                <div class="WelcomeContainer-templateList" id="WelcomeContainer-templateList">
+                  <div class="WelcomeContainer-template js-TemplateButton" data-width="10" data-height="10">
+                    <svg class="WelcomeContainer-templateIcon">
+                      <use xlink:href="./App/assets/icons/grid-icon.svg#icon"></use>
+                    </svg>
+                    <span class="WelcomeContainer-templateText">10 x 10</span>
+                  </div>
+                  <div class="WelcomeContainer-template js-TemplateButton" data-width="10" data-height="10">
+                    <svg class="WelcomeContainer-templateIcon">
+                      <use xlink:href="./App/assets/icons/grid-icon.svg#icon"></use>
+                    </svg>
+                    <span class="WelcomeContainer-templateText">10 x 10</span>
+                  </div>
+                  <div class="WelcomeContainer-template js-TemplateButton" data-width="20" data-height="20">
+                    <svg class="WelcomeContainer-templateIcon">
+                      <use xlink:href="./App/assets/icons/grid-icon.svg#icon"></use>
+                    </svg>
+                    <span class="WelcomeContainer-templateText">20 x 20</span>
+                  </div>
+                  <div class="WelcomeContainer-template js-TemplateButton" data-width="40" data-height="40">
+                    <svg class="WelcomeContainer-templateIcon">
+                      <use xlink:href="./App/assets/icons/grid-icon.svg#icon"></use>
+                    </svg>
+                    <span class="WelcomeContainer-templateText">40 x 40</span>
+                  </div>
+                  <div class="WelcomeContainer-template js-TemplateButton" data-width="50" data-height="50">
+                    <svg class="WelcomeContainer-templateIcon">
+                      <use xlink:href="./App/assets/icons/grid-icon.svg#icon"></use>
+                    </svg>
+                    <span class="WelcomeContainer-templateText">50 x 50</span>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+            <section class="WelcomeContainer-section">
+              <h1 class="WelcomeContainer-sectionTitle">Custom canvas</h1>
+              <div class="WelcomeContainer-sectionBody">
+
+                <div class="GroupDimensions">
+                  <div class="GroupDimensions-inputRow js-GroupDimensions-inputRow">
+                    <div class="GroupDimensions-inputRowContent">
+                      <label for="WidthCustomCanvasInput" class="GroupDimensions-inputGroup">
+                        <span class="GroupDimensions-label">Width</span>
+                        <div class="Input-wrapper">
+                          <input type="number" class="Input GroupDimensions-input" id="WidthCustomCanvasInput">
+                        </div>
+                      </label>
+                      <span class="GroupDimensions-labelPer GroupDimensions-label">×</span>
+                      <label for="HeightCustomCanvasInput" class="GroupDimensions-inputGroup">
+                        <span class="GroupDimensions-label">Height</span>
+                        <div class="Input-wrapper">
+                          <input type="number" class="Input GroupDimensions-input" id="HeightCustomCanvasInput">
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <button class="Button Button--dashed GroupDimensions-GenerateCustomCanvasButton" id="GenerateCustomCanvasButton">
+                    <svg class="Button-icon">
+                      <use xlink:href="./App/assets/icons/color-wand-icon.svg#icon"></use>
+                    </svg>
+                    <span class="Button-text">Generate</span>
+                  </button>
+                </div>
+
+                <div class="GroupLastest" id="GroupLastest">
+                  <span class="GroupLastest-label">Lastest generated</span>
+
+                  <div class="WelcomeContainer-customCanvasList" id="WelcomeContainer-customCanvasList"></div>
+                </div>
+
+              </div>
+            </section>
+
+          </div>
+
+        </section>
+
+      </main>
+
+      <aside class="SettingsBar u-display-none" id="SettingsBar">
+
+        <div class="ColorPalette" id="ColorPalette"></div>
+
+        <section class="SettingsPanel" id="SettingsPanel">
+
+          <div class="SettingBlock SettingBlock--brush">
+
+            <div class="SettingBlock-title">
+              <svg class="SettingBlock-titleIcon">
+                <use xlink:href="./App/assets/icons/cursor-icon.svg#icon" />
+              </svg>
+              <span>Tools</span>
+            </div>
+
+            <div class="SettingBlock-content">
+              <div class="ButtonGroup" id="ToolButtonGroup">
+                <div class="Button js-ToolButtonGroup-button is-selected" id="BrushButton">
+                  <svg class="Button-icon">
+                    <use xlink:href="./App/assets/icons/brush-icon.svg#icon" />
+                  </svg>
+                </div>
+                <div class="Button js-ToolButtonGroup-button" id="EraserButton">
+                  <svg class="Button-icon">
+                    <use xlink:href="./App/assets/icons/eraser-icon.svg#icon" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- <div class="SettingBlock SettingBlock--grid">
+
+            <div class="SettingBlock-title">
+              <svg class="SettingBlock-titleIcon">
+                <use xlink:href="./App/assets/icons/grid-icon.svg#icon" />
+              </svg>
+              <span>Grid</span>
+            </div>
+
+            <div class="SettingBlock-content">
+              <label for="width" class="SettingBlock-label">Ancho</label>
+              <input class="SettingBlock-input" type="text" id="GridWidth">
+              <label for="height" class="SettingBlock-label">Alto</label>
+              <input class="SettingBlock-input" type="text" id="GridHeight">
+            </div>
+
+          </div> -->
+
+          <div class="SettingBlock SettingBlock--brush">
+
+            <div class="SettingBlock-title">
+              <svg class="SettingBlock-titleIcon">
+                <use xlink:href="./App/assets/icons/brush-icon.svg#icon" />
+              </svg>
+              <span>Brush</span>
+            </div>
+
+            <div class="SettingBlock-content">
+              <div class="SwitchButton">
+                <label class="SwitchButton-label" for="SwitchPressBrush">Pressed</label>
+                <input class="SwitchButton-input" type="checkbox" name="PressedBrush" id="SwitchPressBrush">
+                <label class="SwitchButton-wrapperShape" for="SwitchPressBrush">
+                  <div class="SwitchButton-shape">
+                    <div class="SwitchButton-circle"></div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="SettingBlock SettingBlock--erase">
+
+            <div class="row SettingBlock-title">
+              <svg class="SettingBlock-titleIcon">
+                <use xlink:href="./App/assets/icons/eraser-icon.svg#icon" />
+              </svg>
+              <span>Eraser</span>
+            </div>
+
+            <div class="SettingBlock-content">
+              <div class="SwitchButton">
+                <label class="SwitchButton-label" for="SwitchPressEraser">Pressed</label>
+                <input class="SwitchButton-input" type="checkbox" name="PressedErase" id="SwitchPressEraser">
+                <label class="SwitchButton-wrapperShape" for="SwitchPressEraser">
+                  <div class="SwitchButton-shape">
+                    <div class="SwitchButton-circle"></div>
+                  </div>
+                </label>
+              </div>
+
+              <button class="Button" id="EraseAllButton">
+                <span class="Button-text">Erase All</span>
+                <!-- <svg class="Button-icon">
+                  <use xlink:href="./App/assets/icons/eraser-icon.svg#icon" />
+                </svg> -->
+              </button>
+            </div>
+
+          </div>
+
+          <div class="SettingBlock SettingBlock--palette">
+
+            <div class="SettingBlock-title">
+              <svg class="SettingBlock-titleIcon">
+                <use xlink:href="./App/assets/icons/color-palette-linear-icon.svg#icon" />
+              </svg>
+              <span>Palette</span>
+            </div>
+
+            <div class="SettingBlock-content">
+              <div class="ColorPaletteDropdown" id="ColorPaletteDropdown">
+                <div class="ColorPaletteDropdown-select js-ColorPaletteDropdown-select" tabindex="1">
+                  <span class="ColorPaletteDropdown-selectText" id="ColorPaletteDropdown-selectText">Default</span>
+                  <svg class="ColorPaletteDropdown-selectIcon">
+                    <use xlink:href="./App/assets/icons/chevron-down-icon.svg#icon"></use>
+                  </svg>
+                  <ul class="ColorPaletteDropdown-selectList" id="ColorPaletteDropdown-selectList">
+                  </ul>
+                </div>
+                <div class="ColorPaletteDropdown-preview" id="ColorPaletteDropdown-preview"></div>
+              </div>
+
+              <div class="u-display-flex u-flex-direction-column u-gap-6px">
+                <span class="u-fs-14px u-color-gray12 u-fw-500">Color picker</span>
+                <div class="ColorPicker">
+                  <label>
+                    <input class="ColorPicker-inputColor" type="color" id="ColorPicker-inputColor">
+                    <i class="ColorPicker-box" id="ColorPicker-box"></i>
+                  </label>
+                  <input class="ColorPicker-inputText" type="text" id="ColorPicker-inputText">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="SettingBlock SettingBlock--save">
+
+            <div class="SettingBlock-title">
+              <svg class="SettingBlock-titleIconLinear">
+                <use xlink:href="./App/assets/icons/options-icon.svg#icon" />
+              </svg>
+              <span>Options</span>
+            </div>
+
+            <div class="SettingBlock-content">
+              <button class="Button" id="SaveCanvasButton">
+                <svg class="Button-icon">
+                  <use xlink:href="./App/assets/icons/save-icon.svg#icon" />
+                </svg>
+                <span class="Button-text">Save</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- <div class="SettingBlock SettingBlock--capture">
+
+            <div class="SettingBlock-content">
+              <button class="Button" id="CaptureDesign">
+                <span class="Button-text">Capturar</span>
+                <svg class="Button-icon">
+                  <use xlink:href="./App/assets/icons/camera-icon.svg#icon" />
+                </svg>
+              </button>
+            </div>
+
+          </div> -->
+
+        </section>
+
+      </aside>
 
     </div>
-    
-    <section class="Settings" id="Settings">
 
-      <!-- <div class="SettingOption SettingOption--grid">
-        
-        <div class="SettingOption-title">
-          <svg class="SettingOption-titleIcon">
-            <use xlink:href="./assets/grid-icon.svg#icon" />
-          </svg>
-          <span>GRID</span>
-        </div>
-        
-        <div class="SettingOption-content">
-          <label for="width" class="SettingOption-label">Ancho</label>
-          <input class="SettingOption-input" type="text" id="GridWidth">
-          <label for="height" class="SettingOption-label">Alto</label>
-          <input class="SettingOption-input" type="text" id="GridHeight">
-        </div>
-
-      </div> -->
-
-      <div class="SettingOption SettingOption--brush">
-
-        <div class="SettingOption-title">
-          <svg class="SettingOption-titleIcon">
-            <use xlink:href="./assets/brush-icon.svg#icon" />
-          </svg>
-          <span>PRESIONAR</span>
-        </div>
-
-        <div class="SettingOption-content">
-
-          <div class="SwitchButton">
-            <input class="SwitchButton-input" type="checkbox" name="PressedBrush" id="PressedBrush">
-          
-            <label class="SwitchButton-label" for="PressedBrush">
-              <div class="SwitchButton-border">
-                <div class="SwitchButton-circle"></div>
-              </div>
-            </label>
-
-            <svg class="SwitchButton-indicator">
-              <use xlink:href="./assets/hand-finger-right-icon.svg#icon" />
-            </svg>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="SettingOption SettingOption--erase">
-
-        <div class="row SettingOption-title">
-          <svg class="SettingOption-titleIcon">
-            <use xlink:href="./assets/eraser-icon.svg#icon" />
-          </svg>
-          <span>BORRAR</span>
-        </div>
-
-        <div class="SettingOption-content">
-
-          <div class="SwitchButton">
-            <input class="SwitchButton-input" type="checkbox" name="PressedErase" id="PressedErase">
-          
-            <label class="SwitchButton-label" for="PressedErase">
-              <div class="SwitchButton-border">
-                <div class="SwitchButton-circle"></div>
-              </div>
-            </label>
-          
-            <svg class="SwitchButton-indicator">
-              <use xlink:href="./assets/hand-finger-right-icon.svg#icon" />
-            </svg>
-          </div>
-
-          <button class="Button Button--design2" id="EraseGrid">
-            <span class="Button-text">Borrar Todo</span>
-            <svg class="Button-icon">
-              <use xlink:href="./assets/eraser-icon.svg#icon" />
-            </svg>
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="SettingOption SettingOption--save">
-        
-        <div class="SettingOption-content">
-          <button class="Button Button--design2" id="SaveDesign">
-            <span class="Button-text">Guardar</span>
-            <svg class="Button-icon">
-              <use xlink:href="./assets/save-icon.svg#icon" />
-            </svg>
-          </button>
-        </div>
-        
-      </div>
-      
-      <!-- <div class="SettingOption SettingOption--capture">
-
-        <div class="SettingOption-content">
-          <button class="Button Button--design2" id="CaptureDesign">
-            <span class="Button-text">Capturar</span>
-            <svg class="Button-icon">
-              <use xlink:href="./assets/camera-icon.svg#icon" />
-            </svg>
-          </button>
-        </div>
-        
-      </div> -->
-      
-    </section>
-    
     <section class="ModalContainer" id="ModalContainer">
 
       <article class="Modal Modal--dimensions">
-        
+
         <div class="Modal-header">
           <svg class="Modal-headerIcon">
-            <use xlink:href="./assets/modal-dimensions-icon.svg#icon" />
+            <use xlink:href="./App/assets/icons/modal-dimensions-icon.svg#icon" />
           </svg>
           <span class="Modal-headerText">Define el Ancho y Alto</span>
         </div>
@@ -347,7 +397,7 @@
           <div class="Modal-buttonsGroup">
             <button class="Button Button--modal" id="generateCustomDesign">
               <svg class="Button-icon">
-                <use xlink:href="./assets/grid-icon.svg#icon" />
+                <use xlink:href="./App/assets/icons/grid-icon.svg#icon" />
               </svg>
               <span class="Button-text">Generar</span>
             </button>
@@ -356,7 +406,7 @@
         </div>
 
         <svg class="Modal-closeButton">
-          <use xlink:href="./assets/close-cross-circle-icon.svg#icon" />
+          <use xlink:href="./App/assets/icons/close-cross-circle-icon.svg#icon" />
         </svg>
 
       </article>
@@ -366,20 +416,20 @@
         <div class="capture-options">
           <button class="btn" id="zoom">
             <i class="fas fa-search-plus"></i>
-          </button>      
+          </button>
           <button class="btn" id="capture-save">
             <i class="fas fa-save"></i>
-          </button>      
+          </button>
           <button class="btn" id="share">
             <i class="fas fa-share-alt"></i>
-          </button>      
+          </button>
           <button class="btn" id="copy">
             <i class="fas fa-copy"></i>
           </button>
         </div>
-      
+
         <div class="wrapper-capture"></div>
-      
+
       </article>
 
       <article class="modal save-name-modal" id="SaveNameModal">
@@ -390,27 +440,27 @@
           <span>CONFIRMAR</span>
         </button>
       </article> -->
-        
+
     </section>
 
-    <ul class="ContextMenu-designs is-hidden" id="DesignsContextMenu" tabindex="0">
-      <li class="ContextMenu-item" id="RenameDesign">
-        <svg class="ContextMenu-itemIcon"><use xlink:href="./assets/rename-icon.svg#icon" /></svg>
-        <span class="ContextMenu-itemText">Renombrar</span>
+    <ul class="ContextMenu" id="ContextMenu" tabindex="0">
+      <li class="ContextMenu-item js-ContextMenu-item" id="RenameCanvasButton">
+        <svg class="ContextMenu-itemIcon"><use xlink:href="./App/assets/icons/rename-linear-icon.svg#icon" /></svg>
+        <span class="ContextMenu-itemText">Rename</span>
+      </li>
+      <li class="ContextMenu-item js-ContextMenu-item" id="DeleteCanvasButton">
+        <svg class="ContextMenu-itemIcon"><use xlink:href="./App/assets/icons/trash-linear-icon.svg#icon" /></svg>
+        <span class="ContextMenu-itemText">Delete</span>
       </li>
       <!-- <li class="ContextMenu-item">
-        <svg class="ContextMenu-itemIcon"><use xlink:href="./assets/image-download-icon.svg#icon" /></svg>
+        <svg class="ContextMenu-itemIcon"><use xlink:href="./App/assets/icons/image-download-icon.svg#icon" /></svg>
         <span class="ContextMenu-itemText">Descargar Imagen</span>
       </li> -->
-      <li class="ContextMenu-item">
-        <svg class="ContextMenu-itemIcon"><use xlink:href="./assets/delete-icon.svg#icon" /></svg>
-        <span class="ContextMenu-itemText">Eliminar</span>
-      </li>
     </ul>
 
-    <script src="./js/values.js"></script>
-    <script src="./js/utilities.js"></script>
-    <script src="./js/app.js"></script>
+    <div class="Backdrop" id="Backdrop"></div>
+
+    <script type="module" src="./App/main.js"></script>
 
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"
@@ -418,6 +468,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    
+
   </body>
 </html>
