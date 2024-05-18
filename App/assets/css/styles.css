@@ -164,9 +164,11 @@ button {
 
 body {
   height: 100vh;
+  max-height: 100vh;
   font-family: var(--font-default);
   color: var(--gray5-color);
   background-color: var(--gray4-color);
+  overflow: hidden;
 }
 body > .container {
   display: grid;
@@ -238,6 +240,20 @@ body > .container {
 }
 
 /* #endregion Button--dashed */
+
+/* #region IconButton */
+
+.IconButton {
+  padding: 0;
+  width: 2rem;
+  aspect-ratio: 1 / 1;
+}
+.IconButton-icon {
+  width: 1.5rem;
+  aspect-ratio: 1 / 1;
+}
+
+/* #endregion IconButton */
 
 /* #region ButtonGroup */
 
@@ -556,6 +572,34 @@ input.Input:-internal-autofill-selected {
 
 /* #endregion ColorPaletteDropdown */
 
+/* #region ZoomControl */
+
+.ZoomControl {
+  --border-radius: 0.3125rem;
+  display: flex;
+  align-items: center;
+  background-color: var(--gray3-color);
+  border-radius: var(--border-radius);
+  user-select: none;
+}
+.ZoomControl-button {
+  width: 2rem;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--gray17-color);
+  border-radius: var(--border-radius);
+}
+.ZoomControl-percentage {
+  padding: 0 .4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray12-color);
+}
+.ZoomControl-percentage::after { content: '%'; }
+
+/* #endregion ZoomControl */
 
 /* CUSTOM COMPONENTS */
 
@@ -902,10 +946,11 @@ input.Input:-internal-autofill-selected {
 
 .CanvasEditor {
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
-  /* width: 100%; height: 100%;
-  padding: 2rem; */
+  width: 100%;
+  height: 100%;
+  /* padding: 2rem; */
 }
 .container-CanvasEditor.no-canvas .CanvasEditor {
   display: none;
@@ -1169,7 +1214,6 @@ input.Input:-internal-autofill-selected {
 
 /* #endregion */
 
-
 /* #region ColorPalette */
 
 .ColorPalette {
@@ -1228,11 +1272,11 @@ input.Input:-internal-autofill-selected {
   background-color: var(--gray3-color);
 }
 
-.SettingsBar .Button,
+/* .SettingsBar .Button,
 .SettingsBar .ColorPaletteDropdown,
 .SettingsBar .ColorPicker {
   width: 100%;
-}
+} */
 
 .SettingsPanel {
   width: 12.93rem;
@@ -1294,6 +1338,40 @@ input.Input:-internal-autofill-selected {
 }
 .SettingBlock-input:hover { border-color: var(--gray12-color); }
 .SettingBlock-input:focus { border-color: var(--secondary-color); }
+
+.SettingBlock-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+.SettingBlock-groupTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gray12-color);
+}
+.SettingBlock-groupContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.SettingBlock-row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.CanvasBlock-propertyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.CanvasBlock-propertyItem {
+  font-size: 0.875rem;
+  display: flex; gap: 0.625rem;
+}
 
 /* #region -- SettingBlock--grid -- */
 
@@ -1656,6 +1734,11 @@ input.Input:-internal-autofill-selected {
 
 /* #endregion ContextMenu */
 
+.CanvasToFitButton {
+  fill: none;
+  stroke: var(--gray17-color);
+}
+
 /* #region UTILS */
 
 .u-black { background-color: black; }
@@ -1731,6 +1814,10 @@ input.Input:-internal-autofill-selected {
 .u-color-gray14 { color: var(--gray14-color); }
 .u-color-gray16 { color: var(--gray16-color); }
 .u-color-gray17 { color: var(--gray17-color); }
+
+.u-width-100p {
+  width: 100%;
+}
 
 /* #endregion UTILS */
 

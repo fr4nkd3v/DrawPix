@@ -1,4 +1,4 @@
-import { NATIVE_COLOR_PALETTES } from '../../constants/index.js';
+import { NATIVE_COLOR_PALETTES, ZOOM_SCALE } from '../../constants/index.js';
 import { createElement } from '../../utils/index.js';
 import UI from '../ui.js'
 
@@ -11,6 +11,8 @@ export function SettingsBarView({
   unsetToolPressed,
   handleEraseAllPixels,
   handleUpdateCanvasHtml,
+  handleZoom,
+  handleCanvasToFit,
 }) {
   const settingsBar = UI.settingsBar;
   const toolButtonGroup = UI.toolButtonGroup;
@@ -29,6 +31,13 @@ export function SettingsBarView({
   const switchPressEraser = UI.switchPressEraser;
   const eraseAllButton = UI.eraseAllButton;
   const saveCanvasButton = UI.saveCanvasButton;
+  const titleCanvasLabel = UI.titleCanvasLabel;
+  const sizeCanvasLabel = UI.sizeCanvasLabel;
+  const zoomControl = UI.zoomControl;
+  const zoomOutButton = UI.zoomOutButton;
+  const zoomInButton = UI.zoomInButton;
+  const zoomPercentageLabel = UI.zoomPercentageLabel;
+  const canvasToFitButton = UI.canvasToFitButton;
 
   brushButton.onclick = handleBrushButtonClick;
   eraserButton.onclick = handleEraserButtonClick;
@@ -40,6 +49,9 @@ export function SettingsBarView({
   switchPressEraser.onchange = handleSwitchPressEraserChange;
   eraseAllButton.onclick = handleEraseAllPixels;
   saveCanvasButton.onclick = handleUpdateCanvasHtml;
+  zoomOutButton.onclick = () => handleZoomButtonClick(1);
+  zoomInButton.onclick = () => handleZoomButtonClick(-1);
+  canvasToFitButton.onclick = handleCanvasToFit;
 
   function renderColorPalette(colorPaletteArr, idPalette) {
     // If this color palette is already selected
@@ -131,6 +143,22 @@ export function SettingsBarView({
     else unsetToolPressed();
   }
 
+  function handleZoomButtonClick(zoomActionValue) {
+    const currentPercentage = getCurrentZoomPercentage();
+    const foundIndex = ZOOM_SCALE.indexOf(currentPercentage);
+    const maximumIndex = ZOOM_SCALE.length - 1;
+
+    let newPercentage;
+    if (
+      (foundIndex === 0 && zoomActionValue === 1) ||
+      (foundIndex === maximumIndex && zoomActionValue === -1) ||
+      (foundIndex !== -1 && foundIndex !== 0 && foundIndex !== maximumIndex)
+    ) {
+      newPercentage = ZOOM_SCALE[foundIndex + zoomActionValue];
+      handleZoom(newPercentage);
+    }
+  }
+
   function toggleExpandColorPaletteDropdown(isExpanded) {
     if (isExpanded) {
       colorPaletteDropdown.classList.add('is-expanded');
@@ -205,6 +233,29 @@ export function SettingsBarView({
     }
   }
 
+  function loadCanvasData({ title, width, height }) {
+    titleCanvasLabel.textContent = title;
+    sizeCanvasLabel.textContent = `${width} x ${height}`;
+  }
+
+  function getCanvasData() {
+    const [ width, height ] = sizeCanvasLabel.textContent.split(' x ');
+    return {
+      title: titleCanvasLabel.textContent,
+      width,
+      height,
+    }
+  }
+
+  function updateZoomPercentage(percentage) {
+    zoomControl.dataset.percentage = percentage;
+    zoomPercentageLabel.textContent = percentage;
+  }
+
+  function getCurrentZoomPercentage() {
+    return Number(zoomControl.dataset.percentage);
+  }
+
   return {
     toggleDisplaySettingsBar,
     renderColorPalette,
@@ -214,6 +265,9 @@ export function SettingsBarView({
     changeSwitchPressEraserChecked,
     selectBrushToolButton,
     selectEraserToolButton,
+    loadCanvasData,
+    getCanvasData,
+    updateZoomPercentage,
   }
 }
 
@@ -222,7 +276,7 @@ function templatePaletteColor(color, asElement = false) {
     const element = createElement('div', {
       className: 'ColorPalette-color js-ColorPalette-color',
       dataset: { color },
-      style: `background-color: ${color}; fill:${color}`,
+      style: { 'background-color': color, 'fill': color},
     })
     element.innerHTML = `<svg class="ColorPalette-icon"><use xlink:href="./App/assets/icons/check-icon.svg#icon"></use></svg>`
     return element;

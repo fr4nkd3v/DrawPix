@@ -191,7 +191,50 @@
 
         <section class="SettingsPanel" id="SettingsPanel">
 
-          <div class="SettingBlock SettingBlock--brush">
+          <div class="SettingBlock CanvasBlock">
+
+            <div class="SettingBlock-title">
+              <svg class="SettingBlock-titleIcon">
+                <use xlink:href="./App/assets/icons/grid-icon.svg#icon" />
+              </svg>
+              <span>Canvas</span>
+            </div>
+
+            <div class="SettingBlock-content">
+              <div class="CanvasBlock-propertyList">
+                <div class="CanvasBlock-propertyItem">
+                  <span>Title:</span><span id="CanvasBlock-titleCanvas"></span>
+                </div>
+                <div class="CanvasBlock-propertyItem">
+                  <span>Size:</span><span id="CanvasBlock-sizeCanvas"></span>
+                </div>
+              </div>
+
+              <div class="SettingBlock-group">
+                <div class="SettingBlock-groupTitle">Zoom</div>
+                <div class="SettingBlock-groupContent">
+
+                  <div class="SettingBlock-row">
+                    <div class="ZoomControl" id="ZoomControl">
+                      <div class="ZoomControl-button Button" id="ZoomOutButton">+</div>
+                      <span class="ZoomControl-percentage" id="ZoomPercentageLabel"></span>
+                      <div class="ZoomControl-button Button" id="ZoomInButton">-</div>
+                    </div>
+
+                    <div class="Button IconButton CanvasToFitButton" id="CanvasToFitButton">
+                      <svg class="IconButton-icon">
+                        <use xlink:href="./App/assets/icons/resize-icon.svg#icon" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="SettingBlock">
 
             <div class="SettingBlock-title">
               <svg class="SettingBlock-titleIcon">
@@ -235,7 +278,7 @@
 
           </div> -->
 
-          <div class="SettingBlock SettingBlock--brush">
+          <div class="SettingBlock">
 
             <div class="SettingBlock-title">
               <svg class="SettingBlock-titleIcon">
@@ -258,7 +301,7 @@
 
           </div>
 
-          <div class="SettingBlock SettingBlock--erase">
+          <div class="SettingBlock">
 
             <div class="row SettingBlock-title">
               <svg class="SettingBlock-titleIcon">
@@ -278,11 +321,8 @@
                 </label>
               </div>
 
-              <button class="Button" id="EraseAllButton">
+              <button class="Button u-width-100p" id="EraseAllButton">
                 <span class="Button-text">Erase All</span>
-                <!-- <svg class="Button-icon">
-                  <use xlink:href="./App/assets/icons/eraser-icon.svg#icon" />
-                </svg> -->
               </button>
             </div>
 
@@ -298,7 +338,7 @@
             </div>
 
             <div class="SettingBlock-content">
-              <div class="ColorPaletteDropdown" id="ColorPaletteDropdown">
+              <div class="ColorPaletteDropdown u-width-100p" id="ColorPaletteDropdown">
                 <div class="ColorPaletteDropdown-select js-ColorPaletteDropdown-select" tabindex="1">
                   <span class="ColorPaletteDropdown-selectText" id="ColorPaletteDropdown-selectText">Default</span>
                   <svg class="ColorPaletteDropdown-selectIcon">
@@ -312,7 +352,7 @@
 
               <div class="u-display-flex u-flex-direction-column u-gap-6px">
                 <span class="u-fs-14px u-color-gray12 u-fw-500">Color picker</span>
-                <div class="ColorPicker">
+                <div class="ColorPicker u-width-100p">
                   <label>
                     <input class="ColorPicker-inputColor" type="color" id="ColorPicker-inputColor">
                     <i class="ColorPicker-box" id="ColorPicker-box"></i>
@@ -334,7 +374,7 @@
             </div>
 
             <div class="SettingBlock-content">
-              <button class="Button" id="SaveCanvasButton">
+              <button class="Button u-width-100p" id="SaveCanvasButton">
                 <svg class="Button-icon">
                   <use xlink:href="./App/assets/icons/save-icon.svg#icon" />
                 </svg>

@@ -21,6 +21,13 @@ const canvasEditor = document.getElementById('CanvasEditor');
 const canvasItemContextMenu = document.getElementById('ContextMenu');
 
 const settingsBar = document.getElementById('SettingsBar');
+const titleCanvasLabel = document.getElementById('CanvasBlock-titleCanvas');
+const zoomControl = document.getElementById('ZoomControl');
+const sizeCanvasLabel = document.getElementById('CanvasBlock-sizeCanvas');
+const zoomOutButton = document.getElementById('ZoomOutButton');
+const zoomInButton = document.getElementById('ZoomInButton');
+const zoomPercentageLabel = document.getElementById('ZoomPercentageLabel');
+const canvasToFitButton = document.getElementById('CanvasToFitButton');
 const toolButtonGroup = document.getElementById('ToolButtonGroup');
 const brushButton = document.getElementById('BrushButton');
 const eraserButton = document.getElementById('EraserButton');
@@ -88,6 +95,13 @@ export default {
   canvasEditor,
   canvasItemContextMenu,
   settingsBar,
+  titleCanvasLabel,
+  sizeCanvasLabel,
+  zoomControl,
+  zoomOutButton,
+  zoomInButton,
+  zoomPercentageLabel,
+  canvasToFitButton,
   toolButtonGroup,
   brushButton,
   eraserButton,

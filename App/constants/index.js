@@ -372,3 +372,5 @@ export const CANVAS_TEMPLATES = [
   { width: 40, height: 40 },
   { width: 50, height: 50 },
 ];
+
+export const ZOOM_SCALE = [25, 50, 75, 100, 125, 150, 200];

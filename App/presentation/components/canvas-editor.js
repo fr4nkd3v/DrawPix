@@ -1,3 +1,4 @@
+import { createElement, getComputedStyleProperty, parsePixelSizeToNumber } from '../../utils/index.js';
 import UI from '../ui.js';
 
 export function CanvasEditorView({
@@ -7,54 +8,55 @@ export function CanvasEditorView({
   isBrushToolPressed,
   isEraserToolPressed,
   toggleSavedCanvasItem,
+  updateZoomPercentage,
 }) {
   const canvasEditor = UI.canvasEditor;
   const canvasEditorContainer = UI.canvasEditorContainer;
 
   function generateCanvasHtml(width, height) {
+    // Clear canvas
     canvasEditorContainer.classList.remove('no-canvas');
     canvasEditor.innerHTML = '';
 
-    const wrapperCanvasEditor = document.createElement("div");
-    wrapperCanvasEditor.classList.add("CanvasEditor-wrapper");
-    wrapperCanvasEditor.style.setProperty("width", "100%");
-    wrapperCanvasEditor.style.setProperty("height", "100%");
-    canvasEditor.appendChild(wrapperCanvasEditor);
+    // Create canvas wrapper
+    const canvasEditorWrapper = createElement('div', {
+      className: 'CanvasEditor-wrapper js-CanvasEditor-wrapper',
+    });
+    canvasEditor.appendChild(canvasEditorWrapper);
 
-    // Generate pixel's Editor by width & height
+    // Generate editor pixels by width & height
     for (let w = 0; w < width; w++) {
       for (let h = 0; h < height; h++) {
-        const pixelElement = generatePixel(`block-${w}-${h}`);
-        wrapperCanvasEditor.appendChild(pixelElement);
+        // const pixelElement = generatePixel(`block-${w}-${h}`);
+        const pixelElement = generatePixel();
+        canvasEditorWrapper.appendChild(pixelElement);
       }
     }
 
-    const { pixelsWidth, pixelsHeight } = getDimensionsInPixels(canvasEditor);
-    let byWidth;
-    if (pixelsHeight > pixelsWidth) {
-      byWidth = true;
-    } else if (pixelsHeight < pixelsWidth) {
-      byWidth = false;
-    } else { // pixelsHeight & pixelsWidth are equal
-      if (width > height || width === height) byWidth = true;
-      else byWidth = false;
-    }
-    const pixelSideLength = getPixelSideLength(byWidth, wrapperCanvasEditor, height, width);
+    // Adjust canvas to 100% in canvas editor
+    canvasToFit({canvasEditorWrapper, width, height});
 
-    wrapperCanvasEditor.style.setProperty('grid-template-rows', `repeat(${height}, ${pixelSideLength})`);
-    wrapperCanvasEditor.style.setProperty('grid-template-columns', `repeat(${width}, ${pixelSideLength})`);
-    wrapperCanvasEditor.style.setProperty("width", "auto");
-    wrapperCanvasEditor.style.setProperty("height", "auto");
-
+    // Load event listeners & return canvas wrapper html
     loadCanvasEditorEventListeners();
-
     return canvasEditor.innerHTML;
   }
 
-  function loadCanvas(canvasHtml) {
+  function loadCanvas(canvasHtml, width, height) {
     canvasEditorContainer.classList.remove('no-canvas');
     canvasEditor.innerHTML = canvasHtml;
+
+    const canvasEditorWrapper = getCurrentCanvasWrapper();
+    if (!canvasEditorWrapper) return;
+
+    // Adjust canvas to 100% in canvas editor
+    canvasToFit({canvasEditorWrapper, width, height});
+
     loadCanvasEditorEventListeners();
+  }
+
+  function getCurrentCanvasWrapper() {
+    const canvasEditorWrapper = canvasEditor.querySelector('.js-CanvasEditor-wrapper');
+    return canvasEditorWrapper;
   }
 
   function getCanvasHtml() {
@@ -96,11 +98,12 @@ export function CanvasEditorView({
   }
 
   function loadCanvasEditorEventListeners() {
-    const wrapperCanvasEditor = canvasEditor.querySelector('.CanvasEditor-wrapper');
+    const canvasEditorWrapper = getCurrentCanvasWrapper();
+    if (!canvasEditorWrapper) return;
 
-    wrapperCanvasEditor.addEventListener('mousedown', handleCanvasEditorMousedown);
-    wrapperCanvasEditor.addEventListener('mouseover', handleCanvasEditorHover);
-    wrapperCanvasEditor.addEventListener("dragstart", (e) => e.preventDefault());
+    canvasEditorWrapper.addEventListener('mousedown', handleCanvasEditorMousedown);
+    canvasEditorWrapper.addEventListener('mouseover', handleCanvasEditorHover);
+    canvasEditorWrapper.addEventListener("dragstart", (e) => e.preventDefault());
   }
 
   function paintPixel(pixelElement) {
@@ -133,6 +136,63 @@ export function CanvasEditorView({
     toggleSavedCanvasItem(false);
   }
 
+  function getPixel100PercentageSize() {
+    const canvasEditorWrapper = getCurrentCanvasWrapper();
+    if (!canvasEditorWrapper) return;
+
+    const pixelSizeRaw = canvasEditorWrapper.dataset.pixelSize;
+    if (!pixelSizeRaw) return;
+
+    const pixelSize = parsePixelSizeToNumber(pixelSizeRaw, 2);
+    return pixelSize;
+  }
+
+  function makeZoom({ percentage, width, height }) {
+    const size = getPixel100PercentageSize();
+    if (!size) return;
+
+    const newSize = (size * percentage / 100).toFixed(2).toString() + 'px';
+    const canvasEditorWrapper = getCurrentCanvasWrapper();
+    if (!canvasEditorWrapper) return;
+
+    canvasEditorWrapper.style.setProperty('grid-template-columns', `repeat(${width}, ${newSize}`);
+    canvasEditorWrapper.style.setProperty('grid-template-rows', `repeat(${height}, ${newSize}`);
+    updateZoomPercentage(percentage);
+  }
+
+  function canvasToFit({ canvasEditorWrapper, width, height }) {
+    // Extend canvas wrapper dimensions
+    canvasEditorWrapper.style.setProperty("width", "100%");
+    canvasEditorWrapper.style.setProperty("height", "100%");
+    canvasEditorWrapper.style.setProperty('grid-template-rows', `repeat(${height}, 1fr)`);
+    canvasEditorWrapper.style.setProperty('grid-template-columns', `repeat(${width}, 1fr)`);
+
+    // Get canvas editor dimensions
+    const { widthInPixels, heightInPixels } = getDimensionsInPixels(canvasEditor);
+
+    // Get pixel side size to fit
+    let dimension;
+    if (heightInPixels > widthInPixels) {
+      dimension = 'width';
+    } else if (heightInPixels < widthInPixels) {
+      dimension = 'height';
+    } else { // Are equal
+      if (width > height || width === height)
+        dimension = 'width';
+      else
+        dimension = 'height';
+    }
+    const pixelSideSize = getPixelSideSize(dimension, canvasEditorWrapper, height, width);
+
+    // Set final styles & set pixel size data of 100% zoom
+    canvasEditorWrapper.style.setProperty('grid-template-rows', `repeat(${height}, ${pixelSideSize})`);
+    canvasEditorWrapper.style.setProperty('grid-template-columns', `repeat(${width}, ${pixelSideSize})`);
+    canvasEditorWrapper.style.setProperty("width", "auto");
+    canvasEditorWrapper.style.setProperty("height", "auto");
+    canvasEditorWrapper.dataset.pixelSize = pixelSideSize;
+    updateZoomPercentage(100);
+  }
+
   return {
     generateCanvasHtml,
     loadCanvas,
@@ -141,32 +201,41 @@ export function CanvasEditorView({
     changeCanvasEditorIfEraserPressed,
     eraseAllPixels,
     getCanvasHtml,
+    makeZoom,
+    canvasToFit,
+    getCurrentCanvasWrapper,
   }
 }
 
-function generatePixel(id) {
+function generatePixel() {
   const pixelEditor = document.createElement('div');
-  pixelEditor.id = id;
+  // pixelEditor.id = id;
   pixelEditor.classList.add('js-CanvasEditor-pixel', 'CanvasEditor-pixel');
   return pixelEditor;
 }
 
-function getPixelSideLength(byWidth, wrapperCanvasEditor, height, width) {
-  wrapperCanvasEditor.style.setProperty('grid-template-columns', `repeat(${width}, ${byWidth ? '1fr' : '1px'})`);
-  wrapperCanvasEditor.style.setProperty('grid-template-rows', `repeat(${height}, ${byWidth ? '1px' : '1fr'})`);
+function getPixelSideSize(dimension, wrapperCanvasEditor, height, width) {
+  if (!['width', 'height'].includes(dimension)) {
+    console.error(`Dimension ${dimension} not available.`);
+    return;
+  }
+
+  wrapperCanvasEditor.style.setProperty('grid-template-columns', `repeat(${width}, '1fr'`);
+  wrapperCanvasEditor.style.setProperty('grid-template-rows', `repeat(${height}, '1fr'`);
 
   const somePixel = wrapperCanvasEditor.querySelector('.js-CanvasEditor-pixel');
-  const pixelSideLength = getComputedStyle(somePixel).getPropertyValue(byWidth ? 'width' : 'height');
-  return pixelSideLength;
+  const pixelSideSizeInPixels = getComputedStyleProperty(somePixel, dimension);
+  const pixelSize = parsePixelSizeToNumber(pixelSideSizeInPixels, 2);
+  return `${pixelSize}px`;
 }
 
 function getDimensionsInPixels(element) {
-  const pixelsWidth = getComputedStyle(element).getPropertyValue('width').slice(0, 2);
-  const pixelsHeight = getComputedStyle(element).getPropertyValue('height').slice(0, 2);
+  const pixelsWidth = getComputedStyleProperty(element, 'width').slice(0, -2);
+  const pixelsHeight = getComputedStyleProperty(element, 'height').slice(0, -2);
 
   return {
-    pixelsWidth: Number(pixelsWidth),
-    pixelsHeight: Number(pixelsHeight),
+    widthInPixels: Number(pixelsWidth),
+    heightInPixels: Number(pixelsHeight),
   }
 }
 

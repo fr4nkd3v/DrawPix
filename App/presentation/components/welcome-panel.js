@@ -28,6 +28,10 @@ export function WelcomePanelView({
 
     const { width, height } = templateButton.dataset;
     handleCanvasByWidthAndHeightClick({width, height});
+
+    if (isWelcomePanelInModalMode()) {
+      handleCloseModalButton();
+    }
   }
 
   function handleGenerateCustomCanvasClick() {
@@ -125,6 +129,10 @@ export function WelcomePanelView({
     } else {
       inputRow.classList.remove('show-error');
     }
+  }
+
+  function isWelcomePanelInModalMode() {
+    return welcomePanel.classList.contains('modal-mode');
   }
 
   return {
