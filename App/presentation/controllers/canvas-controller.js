@@ -41,6 +41,8 @@ export function CanvasController() {
     unsetToolPressed,
     handleEraseAllPixels,
     handleUpdateCanvasHtml,
+    handleZoom,
+    handleCanvasToFit,
   });
   const canvasEditorView = CanvasEditorView({
     getSelectedColor,
@@ -49,6 +51,7 @@ export function CanvasController() {
     isBrushToolSelected,
     isEraserToolSelected,
     toggleSavedCanvasItem: canvasBarView.toggleSavedCanvasItem,
+    updateZoomPercentage: settingsBarView.updateZoomPercentage,
   });
   const headerView = HeaderView(canvasBarView.toggleCollapseCanvasBar);
 
@@ -84,7 +87,8 @@ export function CanvasController() {
   }
 
   function handleRenameCanvas(id, name) {
-    caseRenameCanvas(id, name);
+    const { width, height } = caseRenameCanvas(id, name);
+    settingsBarView.loadCanvasData({ title: name, width, height });
   }
 
   function handleDeleteCanvas(id) {
@@ -98,10 +102,11 @@ export function CanvasController() {
   // Welcome Panel
   function handleCanvasByWidthAndHeightClick({ width, height }) {
     const canvasHtml = generateCanvasHtml({width, height});
-    const generatedId = caseCreateCanvas({width, height, html: canvasHtml});
+    const { id: generatedId, name } = caseCreateCanvas({width, height, html: canvasHtml});
     listCanvases();
     setSelectedCanvasId(generatedId);
     canvasBarView.changeCanvasItemSelectedById(generatedId);
+    settingsBarView.loadCanvasData({ title: name, width, height });
   }
 
   function listCustomCanvasTemplates() {
@@ -115,18 +120,24 @@ export function CanvasController() {
 
   // Canvas Editor
   function generateCanvasHtml(canvas) {
+    // First show settingsbar for set correctly width of canvas editor
+    settingsBarView.toggleDisplaySettingsBar(true);
+
     const { width, height } = canvas;
     const generatedHtml = canvasEditorView.generateCanvasHtml(width, height);
-    settingsBarView.toggleDisplaySettingsBar(true);
     canvasBarView.toggleDisplayNewCanvasButtonGroup(true);
     return generatedHtml;
   }
 
   function loadCanvasInEditor(canvas) {
-    const { html } = canvas;
-    canvasEditorView.loadCanvas(html);
+    // First show settingsbar for set correctly width of canvas editor
     settingsBarView.toggleDisplaySettingsBar(true);
+
+    const { html, width, height, name } = canvas;
+    canvasEditorView.loadCanvas(html, width, height);
     canvasBarView.toggleDisplayNewCanvasButtonGroup(true);
+
+    settingsBarView.loadCanvasData({ title: name, width, height });
   }
 
   // Settings Bar
@@ -139,6 +150,19 @@ export function CanvasController() {
     const html = canvasEditorView.getCanvasHtml();
     caseUpdateCanvasHtml({canvasId, html});
     canvasBarView.toggleSavedCanvasItem(true);
+  }
+
+  function handleZoom(percentage) {
+    const { width, height } = settingsBarView.getCanvasData();
+    canvasEditorView.makeZoom({ percentage, width, height });
+  }
+
+  function handleCanvasToFit() {
+    const canvasEditorWrapper = canvasEditorView.getCurrentCanvasWrapper();
+    if (!canvasEditorWrapper) return;
+
+    const { width, height } = caseGetCanvas(selectedCanvasId);
+    canvasEditorView.canvasToFit({ canvasEditorWrapper, width, height });
   }
 
   // General

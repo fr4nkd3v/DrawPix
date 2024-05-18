@@ -24,8 +24,21 @@ export function createElement(tagName, { id, className, dataset, style }) {
       element.dataset[property] = dataset[property];
     }
   }
-  if (style) element.setAttribute('style', style);
+  if (style) {
+    for (const property in style) {
+      element.style.setProperty(property, style[property]);
+    }
+  }
   return element;
+}
+
+export function parsePixelSizeToNumber(size = '0px', decimalLength = 0) {
+  const formattedSize = size.slice(0, -2);
+  let number = isValidNumber(formattedSize) ? Number(formattedSize) : 0;
+  if (decimalLength && decimalLength > 0) {
+    number = Number(number.toFixed(decimalLength))
+  }
+  return number;
 }
 
 // A (String) Devuelve el background-color de un elemento
@@ -40,14 +53,20 @@ export function createElement(tagName, { id, className, dataset, style }) {
 // B (Boolean) Valida si un dato ingresado es un número
 //   Recibe un número (o debería)
 //   Retorna true o false
-// export const isValidNumber = value => Number.isInteger(value);
+export function isValidNumber(value) {
+  if (typeof value === 'string') {
+    value = Number(value);
+  }
+
+  return (isFinite(value) && !isNaN(value));
+}
 
 // C (Boolean) Verifica si un nombre es válido
 //   Recibe un String
 //   Retorna true o false
 // export const isValidName = str => (str.trim().length > 0);
 
-// export const getComputedStyleProperty = (element, property) => {
-//   const value = getComputedStyle(element).getPropertyValue(property);
-//   return value;
-// }
+export function getComputedStyleProperty (element, property) {
+  const value = getComputedStyle(element).getPropertyValue(property);
+  return value;
+}

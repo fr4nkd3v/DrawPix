@@ -3,4 +3,5 @@ import { LocalStorageCanvasRepository } from '../repositories/local-storage-canv
 export function caseRenameCanvas(id, name) {
   const repository = LocalStorageCanvasRepository();
   repository.renameCanvas({ id, name });
+  return repository.getCanvas(id);
 }
