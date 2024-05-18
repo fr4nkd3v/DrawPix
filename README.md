@@ -32,7 +32,7 @@ Visit this link to see it in action. 👉 [DrawPix](https://fr4nkd3v.github.io/D
 Clone the project and install dependencies:
 
 ```bash
-  git clone https://github.com/fr4nkd3v/DrawPix.git
+  git clone https://github.com/fr4nkd3v/drawpix.git
   cd DrawPix
   npm install
 ```
