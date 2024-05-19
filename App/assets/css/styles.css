@@ -168,7 +168,6 @@ body {
   font-family: var(--font-default);
   color: var(--gray5-color);
   background-color: var(--gray4-color);
-  overflow: hidden;
 }
 body > .container {
   display: grid;
@@ -356,6 +355,9 @@ input.Input:-internal-autofill-selected {
   padding: .5rem 0.875rem;
   background-color: var(--gray2-color);
   border-radius: 5px;
+}
+.ColorPicker-inputColorLabelWrapper {
+  position: relative;
 }
 .ColorPicker-inputColor {
   width: 0;
