@@ -111,7 +111,7 @@ If you have any comments or feedback, you can write to me at <frank.code31@gmail
 
 Contributions are always welcome!
 
-You can do this by creating a new branch from the `main` branch, push your new branch and open a pull request from your branch to the `main` branch.
+You can do this by creating a new branch from the `dev` branch, push your new branch and open a pull request from your branch to the `dev` branch.
 
 ## ☕ Support
 
