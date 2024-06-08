@@ -278,12 +278,12 @@ function templatePaletteColor(color, asElement = false) {
       dataset: { color },
       style: { 'background-color': color, 'fill': color},
     })
-    element.innerHTML = `<svg class="ColorPalette-icon"><use xlink:href="./App/assets/icons/check-icon.svg#icon"></use></svg>`
+    element.innerHTML = `<svg class="ColorPalette-icon"><use xlink:href="./app/assets/icons/check-icon.svg#icon"></use></svg>`
     return element;
   } else {
     return `
     <div class="ColorPalette-color js-ColorPalette-color" data-color="${color}" style="background-color: ${color}; fill:${color}">
-      <svg class="ColorPalette-icon"><use xlink:href="./App/assets/icons/check-icon.svg#icon"></use></svg>
+      <svg class="ColorPalette-icon"><use xlink:href="./app/assets/icons/check-icon.svg#icon"></use></svg>
     </div>`;
   }
 }

@@ -163,7 +163,7 @@ export function CanvasBarView({
 function templateCanvasItem(name) {
   return `
   <svg class="CanvasItem-icon">
-    <use xlink:href="./App/assets/icons/canvas-icon.svg#icon" />
+    <use xlink:href="./app/assets/icons/canvas-icon.svg#icon" />
   </svg>
   <div class="CanvasItem-indicator js-CanvasItem-indicator"></div>
   <span class="CanvasItem-name js-CanvasItem-name">${name}</span>

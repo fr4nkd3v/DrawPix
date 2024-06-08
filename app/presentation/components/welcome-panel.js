@@ -145,7 +145,7 @@ function templateCanvasTemplate(width, height) {
   return `
     <div class="WelcomeContainer-template js-TemplateButton" data-width="${width}" data-height="${height}">
       <svg class="WelcomeContainer-templateIcon">
-        <use xlink:href="./App/assets/icons/grid-icon.svg#icon"></use>
+        <use xlink:href="./app/assets/icons/grid-icon.svg#icon"></use>
       </svg>
       <span class="WelcomeContainer-templateText">${width} x ${height}</span>
     </div>
