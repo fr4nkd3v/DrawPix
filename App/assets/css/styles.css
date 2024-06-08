@@ -1486,8 +1486,8 @@ input.Input:-internal-autofill-selected {
   font-weight: 700;
   color: var(--gray17-color);
 }
-.Modal-body {
-}
+/* .Modal-body {
+} */
 .Modal-row {
   display: flex; gap: 2rem;
   align-items: center;
@@ -1500,9 +1500,8 @@ input.Input:-internal-autofill-selected {
   display: flex;
   margin-top: 2rem;
 }
-.Modal-input {
-
-}
+/* .Modal-input {
+} */
 .Modal-input:focus + .Modal-inputLabel,
 .Modal-input:valid + .Modal-inputLabel {
   top: -1.8rem; font-size: .8rem;
@@ -1593,7 +1592,7 @@ input.Input:-internal-autofill-selected {
   border-bottom-width: 1px;
 }
 
-.Modal--dimensions {}
+/* .Modal--dimensions {} */
 
 
 
