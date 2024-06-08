@@ -18,7 +18,7 @@ This project is purely made with HTML, CSS and JavaScript.
 
 This project is hosted and published on the web using the **Github Pages** hosting service.
 
-Visit this link to see it in action. 👉 [DrawPix](https://fr4nkd3v.github.io/DrawPix/)
+👉 Visit this [link](https://fr4nkd3v.github.io/drawpix/) to see it in action.
 
 ## 📷 Screenshots
 
